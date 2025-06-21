@@ -6,6 +6,9 @@ import CourseReasons from "@/components/sections/course/course-reasons"
 import CourseBonuses from "@/components/sections/course/course-bonuses"
 import CoursePrice from "@/components/sections/course/course-price"
 import CourseFooterCTA from "@/components/sections/course/course-footer-cta"
+import CourseTestimonials from "@/components/sections/course/course-testimonials"
+import CourseInstructor from "@/components/sections/course/course-instructor"
+import CourseGuarantee from "@/components/sections/course/course-guarantee"
 
 export default function CoursePage() {
   return (
@@ -15,9 +18,12 @@ export default function CoursePage() {
       <CourseBenefits />
       <CourseHighlights />
       <CourseReasons />
-      {/* <CourseBonuses /> */}
-      {/* <CoursePrice /> */}
-      {/* <CourseFooterCTA /> */}
+      <CourseInstructor />
+      <CourseTestimonials />
+      <CourseBonuses />
+      <CourseGuarantee />
+      <CoursePrice />
+      <CourseFooterCTA />
     </main>
   )
 }
