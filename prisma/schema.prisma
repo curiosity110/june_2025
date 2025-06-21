@@ -1,0 +1,18 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Purchase {
+  id           String   @id @default(cuid())
+  email        String
+  productSlug  String
+  fullName     String?
+  phone        String?
+  type         String   // "ebook" or "course"
+  createdAt    DateTime @default(now())
+}

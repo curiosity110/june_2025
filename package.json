@@ -1,0 +1,41 @@
+{
+  "name": "deepdigidive-june-2025",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "@tailwindcss/typography": "^0.5.16",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.515.0",
+    "micro": "^10.0.1",
+    "next": "15.3.3",
+    "ngrok": "^5.0.0-beta.2",
+    "nodemailer": "^7.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
+    "resend": "^4.6.0",
+    "stripe": "^18.2.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/micro": "^7.3.7",
+    "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/stripe": "^8.0.416",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.5",
+    "prisma": "^6.10.1",
+    "tailwindcss": "^4.1.10",
+    "typescript": "^5"
+  }
+}

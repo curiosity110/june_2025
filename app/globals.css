@@ -1,0 +1,18 @@
+/* app/globals.css */
+@import "tailwindcss";
+
+/* ✅ Load Tailwind's core styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ✅ Custom styles */
+:root {
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+}
+
+/* ✅ Global body defaults */
+body {
+  @apply bg-[#0f0f1c] text-white font-sans antialiased;
+}
