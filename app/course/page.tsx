@@ -10,6 +10,7 @@ import CourseFooterCTA from "@/components/sections/course/course-footer-cta"
 export default function CoursePage() {
   return (
     <main className="bg-[#0f0f1c] text-white">
+      {/* <main className="bg-[#0d1522] text-white"> */}
       <CourseHero />
       <CourseBenefits />
       <CourseHighlights />

@@ -9,7 +9,7 @@ export default function Header() {
         <Link href="/" className="text-white hover:text-accent">Home</Link>
         <Link href="/products" className="text-white hover:text-accent">Products</Link>
         <Link href="/course" className="text-white hover:text-accent">Course</Link>
-        <Link href="#" className="text-white hover:text-accent">Blog</Link>
+        <Link href="/blog" className="text-white hover:text-accent">Blog</Link>
       </nav>
       <Button className="bg-purple-600 hover:bg-purple-500 text-white">Buy Now</Button>
     </header>

@@ -7,6 +7,9 @@ export default function AdminDashboard() {
   const [auth, setAuth] = useState(false)
   const [slug, setSlug] = useState(Object.keys(products)[0])
   const [purchases, setPurchases] = useState([])
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState("")
 
   useEffect(() => {
     const key = prompt("Enter admin secret:")
@@ -28,6 +31,24 @@ export default function AdminDashboard() {
 
     fetchPurchases()
   }, [slug, auth])
+
+  const sendEmail = async () => {
+    setStatus("Sending...")
+    const res = await fetch(`/api/admin/send-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, subject, message }),
+    })
+    const data = await res.json()
+    if (data.success) {
+      setStatus(`Sent to ${data.count} recipients`)
+      setSubject("")
+      setMessage("")
+    } else {
+      setStatus(data.error || "Error sending")
+    }
+  }
+
 
   if (!auth) return null
 
@@ -56,6 +77,29 @@ export default function AdminDashboard() {
           </li>
         ))}
       </ul>
+
+      <div className="mt-8 space-y-2">
+        <input
+          className="w-full bg-black text-white border border-gray-500 rounded px-4 py-2"
+          placeholder="Subject"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+        />
+        <textarea
+          className="w-full bg-black text-white border border-gray-500 rounded px-4 py-2"
+          rows={4}
+          placeholder="Message HTML"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button
+          onClick={sendEmail}
+          className="bg-yellow-500 text-black font-semibold px-4 py-2 rounded"
+        >
+          Send Email to Buyers
+        </button>
+        {status && <p className="text-sm mt-2">{status}</p>}
+      </div>
     </div>
   )
 }
