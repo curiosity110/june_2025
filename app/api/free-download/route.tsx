@@ -12,7 +12,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Invalid request" }, { status: 400 })
     }
 
-    await sendEmailByType({ email, productSlug: slug })
+    const result = await sendEmailByType({ email, productSlug: slug })
+
+    if (!result.success) {
+      return NextResponse.json({ success: false, error: result.error || 'Email failed' }, { status: 500 })
+    }
 
     return NextResponse.json({ success: true })
   } catch (err) {

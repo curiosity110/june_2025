@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { products } from "@/lib/products";
 import { prisma } from "@/lib/prisma";
 
@@ -44,6 +45,10 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+
+const resendClient = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 export async function sendDownloadEmail(
   to: string,
@@ -108,29 +113,45 @@ export async function sendEmailByType({
 }: {
   email: string
   productSlug: string
-}) {
+}): Promise<{ success: boolean; error?: string }> {
   const type = getEmailType(productSlug)
   const product = products[productSlug]
-  if (!product) throw new Error('Invalid product slug')
+  if (!product) {
+    return { success: false, error: 'Invalid product slug' }
+  }
 
   const tpl = buildTemplate(type, productSlug)
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[DEV] Would send ${type} email to`, email)
-  } else {
-    if (!process.env.EMAIL_USER || !process.env.NEXT_PUBLIC_SITE_URL) {
-      throw new Error('Missing required environment variables.')
+  try {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[DEV] Would send ${type} email to`, email)
+    } else if (resendClient) {
+      await resendClient.emails.send({
+        from: `"DeepDigiDive" <${process.env.EMAIL_USER || 'noreply@deepdigidive.com'}>`,
+        to: email,
+        subject: tpl.subject,
+        html: tpl.html,
+      })
+    } else {
+      if (!process.env.EMAIL_USER || !process.env.NEXT_PUBLIC_SITE_URL) {
+        throw new Error('Missing required environment variables.')
+      }
+
+      await transporter.sendMail({
+        from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: tpl.subject,
+        html: tpl.html,
+      })
     }
 
-    await transporter.sendMail({
-      from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: tpl.subject,
-      html: tpl.html,
+    await prisma.emailLog.create({
+      data: { email, product: productSlug, template: type },
     })
-  }
 
-  await prisma.emailLog.create({
-    data: { email, product: productSlug, template: type },
-  })
+    return { success: true }
+  } catch (err: any) {
+    console.error('sendEmailByType error:', err)
+    return { success: false, error: err.message }
+  }
 }
