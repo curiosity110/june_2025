@@ -40,10 +40,20 @@ export default function HeroSection() {
 
 
   return (
+<<<<<<< HEAD
         <section className="bg-[#0f0f1c] border-b border-[#1f1f2e] px-6 py-20 rounded-b-2xl max-w-6xl mx-auto shadow-lg relative">
 {/* <!--     <section className="bg-[#0f0f1c] px-6 py-20 border-t border-[#1f1f2e] rounded-b-xl max-w-6xl mx-auto shadow-lg relative"> --> */}
     {/* // <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg mt-10 relative"> */}
 {/* <!--     <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg relative"> --> */}
+=======
+    // <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg mt-10 relative">
+    // <section  className="bg-[#0f0f1c] border-t border-[#1f1f2e] flex justify-between items-center py-6 px-6 max-w-6xl mx-auto">
+    // <section className="bg-[#0f0f1c] border-b border-[#1f1f2e] px-6 py-20 rounded-none max-w-6xl mx-auto shadow-lg relative">
+    <section className="bg-[#0f0f1c] border-b border-[#1f1f2e] px-6 py-20 rounded-b-2xl max-w-6xl mx-auto shadow-lg relative">
+
+      {/* <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg relative"> */}
+
+>>>>>>> ac33bfa (header & hero merged (design))
       <div className="flex flex-col gap-10 sm:flex-row justify-between items-start sm:items-center">
         <div className="max-w-2xl">
           <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-white mb-4 leading-tight">
@@ -83,6 +93,25 @@ export default function HeroSection() {
             </Button>
           </form>
         </div>
+      </div>
+      <div className="overflow-hidden -mb-1">
+        <svg
+          viewBox="0 0 1440 100"
+          className="w-full"
+          preserveAspectRatio="none"
+          fill="#151525"
+        >
+          <path
+            d="M0,0 C600,100 840,0 1440,100 L1440,00 L0,0 Z"
+            fill="url(#gradient)"
+          />
+          <defs>
+            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stopColor="#1f1f2e" />
+              <stop offset="100%" stopColor="#0f0f1c" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
     </section>
   )
