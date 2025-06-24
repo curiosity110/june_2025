@@ -1,5 +1,4 @@
 // app/page.tsx
-import Header from "@/components/layout/header"
 import HeroSection from "@/components/sections/hero"
 import FreebieSection from "@/components/sections/freebie"
 import ProductsSection from "@/components/sections/products"
@@ -14,7 +13,6 @@ export default function HomePage() {
       <FreebieSection />
       <ProductsSection />
       <BundleSection />
-      <LifetimeAccess />
       <TestimonialsSection />
       <Footer />
     </>

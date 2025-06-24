@@ -5,7 +5,6 @@ import type { Metadata } from "next"
 import Header from "@/components/layout/header"
 import { Toaster } from "react-hot-toast"
 
-// Load Google Fonts with CSS variables
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -17,7 +16,6 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 })
 
-// Basic SEO metadata
 export const metadata: Metadata = {
   title: "June — The Ultimate Branding Course",
   description: "A premium digital shop offering AI-powered marketing tips, branding guides, and expert ebooks.",
@@ -36,10 +34,16 @@ export default function RootLayout({
           font-sans bg-background text-white
         `}
       >
-        <Header />
-        <Toaster position="top-center" />
-        {/* ⚙️ This is where shared layout components go (Header, Footer, etc.) */}
-        {children}
+        {/* Fancy glow container */}
+        <div className="relative group max-w-6xl mx-auto">
+            <Header />
+            <Toaster position="top-center" />
+            
+            {/* App content */}
+            <main>
+              {children}
+            </main>
+          </div>
       </body>
     </html>
   )
