@@ -6,7 +6,7 @@ export default function BundleSection() {
   if (!bundle) return null
 
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20 max-w-6xl mx-auto">
+    <section className="bg-[#0d1522] px-6 py-20 max-w-6xl mx-auto">
       <h2 className="text-accent text-sm font-semibold mb-8">🔥 Everything in One Bundle</h2>
       <div className="bg-[#151525] border border-[#2c2c40] p-8 rounded-xl shadow-md grid md:grid-cols-2 gap-8 items-center">
         <img src={bundle.image} alt={bundle.title} className="rounded-lg" />
