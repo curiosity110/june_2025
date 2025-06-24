@@ -16,12 +16,13 @@ interface SearchParams {
 export const dynamic = 'force-dynamic'
 
 export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
-  const cookie = await cookies().get('admin_secret')?.value
+  const cookieStore = await cookies()
+  const cookie = cookieStore.get('admin_secret')?.value
   if (cookie !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
     return <div className="p-6 text-white">Unauthorized</div>
   }
 
-  const { tab = 'sent', product, status, email } = searchParams
+  const { tab = 'sent', product, status, email } = await searchParams
 
   const logs = await prisma.emailLog.findMany({
     where: product ? { product } : undefined,
