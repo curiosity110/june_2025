@@ -4,17 +4,17 @@ import { Button } from "@/components/ui/button"
 
 export default function Header() {
   return (
-     <header className="bg-[#0f0f1c] border-t border-[#1f1f2e] rounded-t-2xl flex justify-between items-center py-6 px-6 max-w-6xl mx-auto">
-{/* <!--     <header className="flex justify-between items-center py-6 px-6 max-w-6xl mx-auto bg-[#0f0f1c] border-b border-[#1f1f2e]"> --> */}
-{/* <!--     <header className="bg-[#0f0f1c] flex justify-between items-center py-6 px-6 max-w-6xl mx-auto"> --> */}
-      <nav className="flex gap-6 text-sm font-semibold text-gray-300">
-        <Link href="/" className="text-white hover:text-accent">Home</Link>
-        <Link href="/blog" className="text-white hover:text-accent">Blog</Link>
-        <Link href="/about" className="text-white hover:text-accent">About</Link>
-        {/* <Link href="/course" className="text-white hover:text-accent">Course</Link> */}
-        {/* <Link href="/products" className="text-white hover:text-accent">Products</Link> */}
-      </nav>
-      <Button className="bg-purple-600 hover:bg-purple-500 text-white">Buy Now</Button>
-    </header>
+<header className="bg-[#1a1a2b] border-t border-[#2a2a3a] shadow-md rounded-t-2xl max-w-6xl mx-auto px-8 py-6 flex justify-between items-center">
+  <nav className="flex gap-6 text-sm font-semibold text-gray-300">
+    <Link href="/" className="text-white hover:text-yellow-400 transition">Home</Link>
+    <Link href="/blog" className="text-white hover:text-yellow-400 transition">Blog</Link>
+    <Link href="/about" className="text-white hover:text-yellow-400 transition">About</Link>
+  </nav>
+  <Button className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold shadow-md">
+    Buy Now
+  </Button>
+</header>
+
+
   )
 }
