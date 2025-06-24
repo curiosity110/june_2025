@@ -20,12 +20,20 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
+  const [checkoutEmail, setCheckoutEmail] = useState("")
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [emailSentTo, setEmailSentTo] = useState("")
 
   if (!product) return <div className="text-white p-10">Product not found.</div>
 
   useEffect(() => {
     setShowThankYou(false)
   }, [slug])
+
+  useEffect(() => {
+    const stored = typeof window !== 'undefined' ? localStorage.getItem('checkout-email') : null
+    if (stored) setCheckoutEmail(stored)
+  }, [])
 
   const handleFreeDownload = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,26 +64,39 @@ export default function ProductPage() {
   }
 
   const handleCheckout = async () => {
+    if (!checkoutEmail) {
+      toast.error("Please enter an email")
+      return
+    }
+
     setLoading(true)
 
     try {
-      await fetch("/api/checkout", {
+      const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug }),
+        body: JSON.stringify({ slug, email: checkoutEmail }),
       })
 
-      // In dummy mode we simply redirect to the thank-you page
-      window.location.href = `/thank-you/${slug}`
+      const data = await res.json()
+      if (data.success) {
+        toast.success(`\ud83d\udce9 Email sent to ${checkoutEmail}!`)
+        setEmailSentTo(checkoutEmail)
+        localStorage.setItem('checkout-email', checkoutEmail)
+      } else {
+        toast.error("\u26a0\ufe0f Email failed to send")
+      }
     } catch (err) {
       console.error("Checkout error:", err)
-      alert("Failed to start checkout.")
+      toast.error("\u26a0\ufe0f Email failed to send")
     }
 
     setLoading(false)
+    setShowEmailModal(false)
   }
 
   return (
+    <>
     <section className="bg-[#0f0f1c] px-6 py-20 text-white">
       <div className="max-w-3xl mx-auto space-y-8">
         <Link
@@ -146,16 +167,42 @@ export default function ProductPage() {
             </form>
 
           ) : (
-            <button
-              onClick={handleCheckout}
-              disabled={loading}
-              className="bg-yellow-400 text-black font-bold px-6 py-3 rounded-md hover:scale-105 transition w-full"
-            >
-              {loading ? "Processing..." : product.ctaLabel}
-            </button>
+            <>
+              <button
+                onClick={() => setShowEmailModal(true)}
+                disabled={loading}
+                className="bg-yellow-400 text-black font-bold px-6 py-3 rounded-md hover:scale-105 transition w-full"
+              >
+                {loading ? "Processing..." : product.ctaLabel}
+              </button>
+              {emailSentTo && (
+                <p className="text-green-400 mt-2">Email sent to {emailSentTo}!</p>
+              )}
+            </>
           )}
         </div>
       </div>
     </section>
+    {showEmailModal && (
+      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div className="bg-[#1f1f2e] p-6 rounded-md space-y-4 w-80">
+          <h2 className="text-lg font-bold text-white">Enter your email</h2>
+          <input
+            type="email"
+            value={checkoutEmail}
+            onChange={(e) => setCheckoutEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="w-full px-3 py-2 rounded-md text-black"
+          />
+          <div className="flex justify-end space-x-2">
+            <button onClick={() => setShowEmailModal(false)} className="text-sm text-white">Cancel</button>
+            <button onClick={handleCheckout} className="bg-yellow-400 text-black font-bold px-4 py-2 rounded-md">
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   )
 }
