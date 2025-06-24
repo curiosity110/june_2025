@@ -18,7 +18,7 @@ export const dynamic = 'force-dynamic'
 export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
   const cookieStore = await cookies()
   const cookie = cookieStore.get('admin_secret')?.value
-  if (cookie !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+  if (cookie !== process.env.ADMIN_SECRET) {
     return <div className="p-6 text-white">Unauthorized</div>
   }
 

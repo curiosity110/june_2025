@@ -9,7 +9,7 @@ export default function RetryAllButton({ product, status, email }: { product?: s
 
   const handle = async () => {
     setLoading(true)
-    const res = await fetch(`/api/admin/retry-all?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+    const res = await fetch(`/api/admin/retry-all`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ product, status, email, forceSend: force }),

@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { cookies } from "next/headers"
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const slug = searchParams.get("slug")
-  const secret = searchParams.get("secret")
+  const cookieStore = cookies()
+  const secret = cookieStore.get("admin_secret")?.value
 
-  if (secret !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+  if (secret !== process.env.ADMIN_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 

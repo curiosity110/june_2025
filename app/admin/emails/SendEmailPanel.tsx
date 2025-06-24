@@ -13,7 +13,7 @@ export default function SendEmailPanel() {
   const send = async (test: boolean) => {
     const list = test ? [testEmail] : emails.split(/[,\n]/).map(e => e.trim()).filter(Boolean)
     if (!list.length) { toast.error('No emails'); return }
-    const res = await fetch(`/api/admin/manual-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+    const res = await fetch(`/api/admin/manual-email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ emails: list, subject, html: body, mode })
