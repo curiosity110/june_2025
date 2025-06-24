@@ -6,7 +6,7 @@ import { logPurchase } from "@/lib/purchase"
 // In dummy payment mode we skip Stripe entirely. This API simply logs a
 // purchase and returns the thank-you URL to redirect the user.
 export async function POST(req: Request) {
-  const { slug } = await req.json()
+  const { slug, email } = await req.json()
 
   const product = products[slug]
   if (!product) {
@@ -14,9 +14,9 @@ export async function POST(req: Request) {
   }
 
   try {
-    const email = process.env.TEST_EMAIL || "test@example.com"
-    await logPurchase(email, slug)
-    return NextResponse.json({ url: `/thank-you/${slug}` })
+    const userEmail = email || process.env.TEST_EMAIL || "test@example.com"
+    await logPurchase(userEmail, slug)
+    return NextResponse.json({ success: true })
   } catch (err) {
     console.error("Dummy checkout error", err)
     return NextResponse.json(

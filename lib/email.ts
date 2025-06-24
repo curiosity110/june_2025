@@ -95,6 +95,10 @@ export async function sendCustomEmail(to: string, subject: string, html: string)
     return
   }
 
+  if (!process.env.RESEND_API_KEY && !(process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
+    console.error('[EMAIL DEBUG] Missing RESEND_API_KEY or SMTP credentials')
+  }
+
   if (!process.env.EMAIL_USER) {
     throw new Error("Missing required environment variables.")
   }
@@ -120,6 +124,10 @@ export async function sendEmailByType({
   email: string
   productSlug: string
 }): Promise<{ success: boolean; error?: string }> {
+  if (!process.env.RESEND_API_KEY && !(process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
+    console.error('[EMAIL DEBUG] Missing RESEND_API_KEY or SMTP credentials')
+  }
+
   const type = getEmailType(productSlug)
   const product = products[productSlug]
   if (!product) {
