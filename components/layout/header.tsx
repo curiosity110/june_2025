@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button"
 
 export default function Header() {
   return (
-    <header className="bg-[#0f0f1c] flex justify-between items-center py-6 px-6 max-w-6xl mx-auto">
+     <header className="bg-[#0f0f1c] border-t border-[#1f1f2e] rounded-t-2xl flex justify-between items-center py-6 px-6 max-w-6xl mx-auto">
+<!--     <header className="flex justify-between items-center py-6 px-6 max-w-6xl mx-auto bg-[#0f0f1c] border-b border-[#1f1f2e]"> -->
+<!--     <header className="bg-[#0f0f1c] flex justify-between items-center py-6 px-6 max-w-6xl mx-auto"> -->
       <nav className="flex gap-6 text-sm font-semibold text-gray-300">
         <Link href="/" className="text-white hover:text-accent">Home</Link>
         <Link href="/blog" className="text-white hover:text-accent">Blog</Link>

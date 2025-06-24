@@ -40,8 +40,10 @@ export default function HeroSection() {
 
 
   return (
+        <section className="bg-[#0f0f1c] border-b border-[#1f1f2e] px-6 py-20 rounded-b-2xl max-w-6xl mx-auto shadow-lg relative">
+<!--     <section className="bg-[#0f0f1c] px-6 py-20 border-t border-[#1f1f2e] rounded-b-xl max-w-6xl mx-auto shadow-lg relative"> -->
     // <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg mt-10 relative">
-    <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg relative">
+<!--     <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg relative"> -->
       <div className="flex flex-col gap-10 sm:flex-row justify-between items-start sm:items-center">
         <div className="max-w-2xl">
           <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-white mb-4 leading-tight">
