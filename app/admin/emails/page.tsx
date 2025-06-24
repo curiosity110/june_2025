@@ -1,131 +1,111 @@
-"use client";
+import { prisma } from '@/lib/prisma'
+import { products } from '@/lib/products'
+import RetryButton from './RetryButton'
 
-import { useEffect, useState } from "react";
+interface SearchParams {
+  product?: string
+  status?: string
+}
 
-export default function EmailLogPage() {
-  const [auth, setAuth] = useState(false);
-  const [logs, setLogs] = useState<any[]>([]);
-  const [queue, setQueue] = useState<any[]>([]);
-  const [filter, setFilter] = useState("");
+export const dynamic = 'force-dynamic'
 
-  useEffect(() => {
-    const key = prompt("Enter admin secret:");
-    if (key === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
-      setAuth(true);
-    } else {
-      alert("Unauthorized");
-    }
-  }, []);
+export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
+  const { product, status } = searchParams
 
-  useEffect(() => {
-    if (!auth) return;
-    const fetchData = async () => {
-      const [logsRes, queueRes] = await Promise.all([
-        fetch(
-          `/api/admin/email-logs?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`,
-        ),
-        fetch(
-          `/api/admin/email-queue?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`,
-        ),
-      ]);
-      const logData = await logsRes.json();
-      const queueData = await queueRes.json();
-      setLogs(logData.logs || []);
-      setQueue(queueData.queue || []);
-    };
-    fetchData();
-  }, [auth]);
+  const logs = await prisma.emailLog.findMany({
+    where: product ? { product } : undefined,
+    orderBy: { sentAt: 'desc' },
+  })
 
-  const retry = async (id: string) => {
-    await fetch(
-      `/api/admin/retry-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      },
-    );
-    location.reload();
-  };
-
-  const filteredLogs = logs.filter(
-    (l) =>
-      l.email.toLowerCase().includes(filter.toLowerCase()) ||
-      l.product.toLowerCase().includes(filter.toLowerCase()),
-  );
-  const filteredQueue = queue.filter(
-    (q) =>
-      q.email.toLowerCase().includes(filter.toLowerCase()) ||
-      q.product.toLowerCase().includes(filter.toLowerCase()),
-  );
-
-  if (!auth) return null;
+  const queue = await prisma.emailQueue.findMany({
+    where: {
+      ...(product ? { product } : {}),
+      ...(status ? { status } : {}),
+    },
+    orderBy: { retryAt: 'desc' },
+  })
 
   return (
     <div className="p-6 text-white">
-      <h1 className="text-2xl font-bold mb-4">📧 Email Send Log</h1>
-      <input
-        className="bg-black text-white border border-gray-500 rounded px-3 py-1 mb-4"
-        placeholder="Filter by email or product"
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-      />
-      <div className="overflow-x-auto">
+      <h1 className="text-2xl font-bold mb-4">📧 Email Activity</h1>
+      <form className="flex flex-wrap gap-2 mb-6">
+        <select
+          name="product"
+          defaultValue={product || ''}
+          className="bg-black text-white border border-gray-500 rounded px-3 py-1"
+        >
+          <option value="">All Products</option>
+          {Object.values(products).map((p) => (
+            <option key={p.slug} value={p.slug}>
+              {p.title}
+            </option>
+          ))}
+        </select>
+        <select
+          name="status"
+          defaultValue={status || ''}
+          className="bg-black text-white border border-gray-500 rounded px-3 py-1"
+        >
+          <option value="">All Statuses</option>
+          <option value="queued">Queued</option>
+          <option value="failed">Failed</option>
+          <option value="delivered">Delivered</option>
+        </select>
+        <button
+          type="submit"
+          className="bg-yellow-500 text-black font-semibold px-4 py-1 rounded"
+        >
+          Apply
+        </button>
+      </form>
+      <div className="overflow-x-auto mb-8">
+        <h2 className="text-xl font-bold mb-2">Sent Emails</h2>
         <table className="min-w-full bg-[#1f1f2e] rounded-md">
           <thead>
             <tr className="text-left bg-[#29293d]">
               <th className="p-2">Email</th>
               <th className="p-2">Product</th>
-              <th className="p-2">Template</th>
               <th className="p-2">Sent At</th>
             </tr>
           </thead>
           <tbody>
-            {filteredLogs.map((log) => (
+            {logs.map((log) => (
               <tr key={log.id} className="border-t border-[#29293d]">
                 <td className="p-2">{log.email}</td>
                 <td className="p-2">{log.product}</td>
-                <td className="p-2 capitalize">{log.template}</td>
-                <td className="p-2">{new Date(log.sentAt).toLocaleString()}</td>
+                <td className="p-2">{log.sentAt.toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {queue.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-2">Queued Emails</h2>
-          <table className="min-w-full bg-[#1f1f2e] rounded-md">
-            <thead>
-              <tr className="text-left bg-[#29293d]">
-                <th className="p-2">Email</th>
-                <th className="p-2">Product</th>
-                <th className="p-2">Retry At</th>
-                <th className="p-2">Action</th>
+      <div className="overflow-x-auto">
+        <h2 className="text-xl font-bold mb-2">Queued Emails</h2>
+        <table className="min-w-full bg-[#1f1f2e] rounded-md">
+          <thead>
+            <tr className="text-left bg-[#29293d]">
+              <th className="p-2">Email</th>
+              <th className="p-2">Product</th>
+              <th className="p-2">Retry At</th>
+              <th className="p-2">Status</th>
+              <th className="p-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {queue.map((q) => (
+              <tr key={q.id} className="border-t border-[#29293d]">
+                <td className="p-2">{q.email}</td>
+                <td className="p-2">{q.product}</td>
+                <td className="p-2">{q.retryAt.toLocaleString()}</td>
+                <td className="p-2 capitalize">{q.status}</td>
+                <td className="p-2">
+                  <RetryButton id={q.id} />
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredQueue.map((q) => (
-                <tr key={q.id} className="border-t border-[#29293d]">
-                  <td className="p-2">{q.email}</td>
-                  <td className="p-2">{q.product}</td>
-                  <td className="p-2">
-                    {new Date(q.retryAt).toLocaleString()}
-                  </td>
-                  <td className="p-2">
-                    <button
-                      className="text-yellow-300"
-                      onClick={() => retry(q.id)}
-                    >
-                      Retry
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
+  )
 }
