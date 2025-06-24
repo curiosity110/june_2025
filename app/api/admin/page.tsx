@@ -49,7 +49,6 @@ export default function AdminDashboard() {
     }
   }
 
-
   if (!auth) return null
 
   return (
