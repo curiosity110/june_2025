@@ -28,4 +28,3 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json({ success: true, count: emails.length })
-}
