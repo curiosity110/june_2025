@@ -57,7 +57,7 @@ export async function GET() {
         try {
             const res = await resend.emails.send({
                 from: "info@ubc-finance.com",
-                to: "info@ubc-finance.com",
+                to: "gjorgidelev98@gmail.com",
                 bcc: uniqueBatch,
                 subject: "Just a little thanks from Gio 🍪",
                 html: `
@@ -66,7 +66,7 @@ export async function GET() {
             <p>You're awesome for opening this.</p>
             <p>I'm building something real with 💻, ☕, and your encouragement.</p>
             <p>Here’s a cookie just for being you: <span style="font-size: 1.5rem;">🍪</span></p>
-            <p style="font-size: 0.9rem; color: #888;">Sent with love from <strong>ubc-finance.com</strong></p>
+            <p style="font-size: 0.9rem; color: #888;">Sent with love from <strong>Your Friend Gio</strong></p>
           </div>
         `,
             });
