@@ -15,7 +15,7 @@
 
 /* ✅ Global body defaults */
 body {
-  @apply bg-[#0f0f1c] text-white font-sans antialiased;
+  @apply bg-[#0b0815] text-white font-sans antialiased;
   /* @apply bg-[#0A0A0A] text-white font-sans antialiased p-[5%]; */
 }
 
