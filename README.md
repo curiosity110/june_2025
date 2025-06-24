@@ -11,10 +11,7 @@
 ## 🛠 Quick Build Steps
 1. Clone this repo
 2. Run `npm install`
-3. Add `.env.local` with:
-   - `STRIPE_SECRET_KEY=`
-   - `OPENAI_API_KEY=`
-   - `RESEND_API_KEY=`
+3. Copy `.env.local.example` to `.env.local` and fill in values.
 4. Run `npm run dev`
 5. Deploy with Vercel
 
