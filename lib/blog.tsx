@@ -26,4 +26,4 @@ export const blogPosts: BlogPost[] = [
   { slug: 'story-18', title: 'Customer Story 18', excerpt: 'These ebooks helped me achieve amazing growth!', content: 'I just wanted to thank the team for the incredible resources. My business feels unstoppable now.' },
   { slug: 'story-19', title: 'Customer Story 19', excerpt: 'These ebooks helped me achieve amazing growth!', content: 'I just wanted to thank the team for the incredible resources. My business feels unstoppable now.' },
   { slug: 'story-20', title: 'Customer Story 20', excerpt: 'These ebooks helped me achieve amazing growth!', content: 'I just wanted to thank the team for the incredible resources. My business feels unstoppable now.' },
-]\n
+]

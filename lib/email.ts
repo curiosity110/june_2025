@@ -46,3 +46,23 @@ export async function sendDownloadEmail(
     `,
   });
 }
+
+export async function sendCustomEmail(to: string, subject: string, html: string) {
+  if (process.env.NODE_ENV === "development") {
+    console.log(`[DEV] Skipping custom email to ${to} with subject ${subject}`)
+    return
+  }
+
+  if (!process.env.EMAIL_USER) {
+    throw new Error("Missing required environment variables.")
+  }
+
+  await transporter.sendMail({
+    from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
+    to,
+    subject,
+    html,
+  })
+}
+}
+

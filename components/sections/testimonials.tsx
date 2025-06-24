@@ -1,5 +1,11 @@
 export default function Testimonials() {
   const testimonials = [
+export default function TestimonialsSection() {
+  const items = [
+    { name: 'Alex', text: 'June helped me launch my first product in days.' },
+    { name: 'Riley', text: 'The templates saved me weeks of work!' },
+    { name: 'Jordan', text: 'Clean design and actionable advice. Love it.' },
+    { name: 'Jordan', text: 'Clean design and actionable advice. Love it.' },
     { name: 'Ava K.', quote: 'These ebooks transformed my marketing strategy!' },
     { name: 'Liam N.', quote: 'I doubled my sales in a week after reading them.' },
     { name: 'Mia R.', quote: 'Finally feel like the smartest person in the room.' },
@@ -19,5 +25,7 @@ export default function Testimonials() {
         </div>
       </div>
     </section>
+  )
+}
   )
 }

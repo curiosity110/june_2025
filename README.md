@@ -13,6 +13,7 @@
 2. Run `npm install`
 3. Add `.env.local` with:
    - `STRIPE_SECRET_KEY=`
+   - `OPENAI_API_KEY=`
    - `RESEND_API_KEY=`
 4. Run `npm run dev`
 5. Deploy with Vercel

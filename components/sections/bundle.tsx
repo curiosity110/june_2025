@@ -2,9 +2,8 @@ import { products } from "@/lib/products"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 export default function BundleSection() {
-  const bundles = Object.values(products).filter(
-    (product) => product.category === "bundle"
-  )
+  const bundle = Object.values(products).find(p => p.category === 'bundle')
+  if (!bundle) return null
 
   return (
 <section className="bg-[#0d1522] px-6 py-20 max-w-5xl mx-auto">
@@ -25,6 +24,5 @@ export default function BundleSection() {
     </div>
   </div>
 </section>
-
   )
 }
