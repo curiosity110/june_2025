@@ -12,8 +12,14 @@ export default function AdminDashboard() {
   const [status, setStatus] = useState("")
 
   useEffect(() => {
+    const existing = document.cookie.split('; ').find(c => c.startsWith('admin_secret='))?.split('=')[1]
+    if (existing === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+      setAuth(true)
+      return
+    }
     const key = prompt("Enter admin secret:")
     if (key === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+      document.cookie = `admin_secret=${key}; path=/; max-age=${60 * 60 * 24 * 30}`
       setAuth(true)
     } else {
       alert("Unauthorized")

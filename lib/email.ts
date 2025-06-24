@@ -22,7 +22,7 @@ function getEmailType(slug: string): EmailType {
 
 function buildTemplate(type: EmailType, slug: string) {
   const product = products[slug];
-  const downloadUrl = `${siteURL}/downloads/${slug}.pdf`;
+  const downloadUrl = `${siteURL}/thank-you/${slug}`;
 
   const bonusText = {
     bundle: "Enjoy your bundle with all future updates.",
@@ -38,9 +38,10 @@ function buildTemplate(type: EmailType, slug: string) {
       <div style="font-family: sans-serif; padding: 20px;">
         <h2 style="color: #eab308;">${product?.title || "Your Download"}</h2>
         <p>${product?.description || "Thanks for grabbing your resource!"}</p>
-        <a href="${downloadUrl}" style="display:inline-block;padding:12px 24px;background-color:#facc15;color:black;font-weight:bold;text-decoration:none;border-radius:8px;">Download</a>
+        <a href="${downloadUrl}" style="display:inline-block;padding:12px 24px;background-color:#facc15;color:black;font-weight:bold;text-decoration:none;border-radius:8px;">Access</a>
         <p style="margin-top:20px">${bonusText[type] || bonusText.default}</p>
         <p style="font-size:12px;color:#999">Need help? Just reply to this email.</p>
+        <p style="font-size:12px;color:#666;margin-top:30px;">Sent from <a href="${siteURL}" style="color:#666;text-decoration:none;">${siteURL.replace(/^https?:\/\//,'')}</a></p>
       </div>
     `,
   };
@@ -52,7 +53,7 @@ export async function sendDownloadEmail(
   downloadSlug: string,
   phone?: string
 ) {
-  const downloadUrl = `${siteURL}/downloads/${downloadSlug}.pdf`;
+  const downloadUrl = `${siteURL}/thank-you/${downloadSlug}`;
 
   const subject = `Your Download: ${productName}`;
   const html = `
@@ -62,6 +63,7 @@ export async function sendDownloadEmail(
       <a href="${downloadUrl}" style="display:inline-block;padding:12px 24px;background-color:#facc15;color:black;font-weight:bold;text-decoration:none;border-radius:8px;">Open Ebook</a>
       <p style="margin-top:20px;font-size:12px;color:#999;">📥 Right-click → Save As to keep it</p>
       <p style="font-size:12px;color:#999;">Questions? Reply to this email.</p>
+      <p style="font-size:12px;color:#666;margin-top:30px;">Sent from <a href="${siteURL}" style="color:#666;text-decoration:none;">${siteURL.replace(/^https?:\/\//,'')}</a></p>
     </div>
   `;
 
@@ -85,6 +87,12 @@ export async function sendCustomEmail(to: string, subject: string, html: string)
     html,
   });
 
+  await prisma.emailLog.upsert({
+    where: { email_template: { email: to, template: "custom" } },
+    update: { count: { increment: 1 }, sentAt: new Date() },
+    create: { email: to, product: "manual", template: "custom" },
+  });
+
   console.log("📬 Custom email response:", res);
 }
 
@@ -103,15 +111,8 @@ export async function sendEmailByType({
   const product = products[productSlug];
   if (!product) return { success: false, error: "Invalid product slug" };
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const alreadySent = await prisma.emailLog.findFirst({
-    where: {
-      email,
-      product: productSlug,
-      sentAt: { gte: today },
-    },
+  const alreadySent = await prisma.emailLog.findUnique({
+    where: { email_template: { email, template: type } },
   });
 
   if (alreadySent) {
