@@ -10,14 +10,46 @@
 :root {
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Space Grotesk', sans-serif;
-  padding: 5%
+  --bg-body: #0b0815;
+  --text-body: #ffffff;
+  --bg-header: #1a1a2b;
+  --border: #2a2a3a;
+  --accent: #facc15;
+  --highlight: #facc15;
+  --section-bg: #0f0f1c;
+  --card-bg: #151525;
+  padding: 5%;
 }
 
-/* ✅ Global body defaults */
 body {
-  @apply bg-[#0b0815] text-white font-sans antialiased;
-  /* @apply bg-[#0A0A0A] text-white font-sans antialiased p-[5%]; */
+  @apply font-sans antialiased;
+  background: var(--bg-body);
+  color: var(--text-body);
 }
+
+.bg-header { background: var(--bg-header); }
+.border-border { border-color: var(--border); }
+.border-accent { border-color: var(--accent); }
+.text-accent { color: var(--accent); }
+.bg-highlight { background: var(--highlight); }
+.bg-section { background: var(--section-bg); }
+.bg-card { background: var(--card-bg); }
+
+/* Theme variations */
+.theme-modern { --bg-body:#0b0815; --text-body:#ffffff; --bg-header:#1a1a2b; --border:#2a2a3a; --accent:#facc15; --highlight:#facc15; --section-bg:#0f0f1c; --card-bg:#151525; }
+.theme-elegant { --bg-body:#1a1616; --text-body:#f8f5f2; --bg-header:#302626; --border:#504040; --accent:#e0c58e; --highlight:#e0c58e; --section-bg:#262222; --card-bg:#3a2f2f; }
+.theme-minimal { --bg-body:#ffffff; --text-body:#000000; --bg-header:#f4f4f4; --border:#d4d4d4; --accent:#111111; --highlight:#333333; --section-bg:#ffffff; --card-bg:#f4f4f4; }
+.theme-futuristic { --bg-body:#050811; --text-body:#d0fcff; --bg-header:#06121e; --border:#123040; --accent:#3cfefb; --highlight:#3cfefb; --section-bg:#09172a; --card-bg:#0e223b; }
+.theme-sci-fi { --bg-body:#080a16; --text-body:#e0e0ff; --bg-header:#141630; --border:#2c2e50; --accent:#a484ff; --highlight:#a484ff; --section-bg:#10142a; --card-bg:#1a2042; }
+
+/* Layout variations */
+.layout-default {}
+.layout-wide {}
+
+@keyframes fade { from { opacity:0 } to { opacity:1 } }
+.animate-fade { animation: fade 0.3s ease-in-out; }
+@keyframes slide { from { transform: translateY(10px); opacity:0 } to { transform:none; opacity:1 } }
+.animate-slide { animation: slide 0.3s ease-in-out; }
 
 .scroll-shadow {
   overflow-y: auto;

@@ -40,7 +40,7 @@ export default function HeroSection() {
 
 
   return (
-    <section className="bg-[#0f0f1c] border-b border-[#1f1f2e] px-6 py-20 rounded-b-2xl max-w-6xl mx-auto shadow-lg relative">
+    <section className="bg-section border-b border-border px-6 py-20 rounded-b-2xl shadow-lg relative">
       {/* <section className="bg-[#232336] border-b border-[#2a2a3a] shadow-lg rounded-b-2xl"> */}
 
 
@@ -52,14 +52,14 @@ export default function HeroSection() {
           <p className="text-accent text-lg font-medium mb-6">
             AI POWER. SOUL-DRIVEN IMPACT.<br /> ENROLL INSTANTLY.
           </p>
-          <Button className="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-6 py-2 rounded-md">Get Started</Button>
+          <Button className="bg-highlight text-black font-bold px-6 py-2 rounded-md">Get Started</Button>
         </div>
 
         {/* <div className="absolute top-6 right-6 bg-[#1f1f2e] text-sm text-white px-4 py-3 rounded-lg shadow-md">
           <p className="font-semibold mb-1">Hello</p>
           <p className="text-xs text-text-soft">How can I help you?</p>
         </div> */}
-        <div className="absolute top-6 right-6 bg-[#1f1f2e] text-sm text-white p-4 rounded-lg shadow-md w-72">
+        <div className="absolute top-6 right-6 bg-card text-sm text-white p-4 rounded-lg shadow-md w-72">
           <div className="h-40 overflow-y-auto space-y-2 mb-2 text-xs">
             {messages.length === 0 && (
               <p className="text-text-soft">How can I help you?</p>
@@ -76,7 +76,7 @@ export default function HeroSection() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask the AI..."
-              className="flex-grow rounded-md bg-[#2c2c40] px-2 py-1 text-white placeholder-gray-400"
+              className="flex-grow rounded-md bg-card px-2 py-1 text-white placeholder-gray-400"
             />
             <Button type="submit" disabled={loading} className="px-3 py-1 text-xs">
               {loading ? "..." : "Send"}

@@ -13,9 +13,9 @@ const highlights = [
 
 export default function CourseHighlights() {
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20">
+    <section className="bg-section px-6 py-20">
       <div className="max-w-5xl mx-auto text-center space-y-8">
-        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-yellow-300">
+        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-accent">
           What You'll Master
         </h2>
         <ul className="grid gap-4 text-left text-white text-sm sm:text-base max-w-3xl mx-auto">

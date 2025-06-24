@@ -31,9 +31,9 @@ export default function FreebieSection() {
   }
 
   return (
-    <section className="bg-[#151525] px-6 py-16 text-white mt-12">
+    <section className="bg-section px-6 py-16 text-white mt-12">
       <div className="max-w-xl mx-auto space-y-6 text-center">
-        <h2 className="text-2xl font-heading font-bold text-yellow-300">
+        <h2 className="text-2xl font-heading font-bold text-accent">
           {freeProduct.title}
         </h2>
         <p className="text-purple-200 text-sm">{freeProduct.description}</p>
@@ -44,19 +44,19 @@ export default function FreebieSection() {
             placeholder="Your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 rounded-md bg-[#2c2c40] text-white placeholder-gray-400"
+            className="w-full px-4 py-2 rounded-md bg-card text-white placeholder-gray-400"
           />
           <input
             type="tel"
             placeholder="Phone (optional)"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-4 py-2 rounded-md bg-[#2c2c40] text-white placeholder-gray-400"
+            className="w-full px-4 py-2 rounded-md bg-card text-white placeholder-gray-400"
           />
           <button
             type="submit"
             disabled={loading}
-            className="bg-yellow-400 text-black font-bold px-6 py-3 rounded-md hover:scale-105 transition w-full"
+            className="bg-highlight text-black font-bold px-6 py-3 rounded-md hover:scale-105 transition w-full"
           >
             {loading ? 'Sending...' : freeProduct.ctaLabel}
           </button>
