@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   if (secret !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id } = await req.json();
+  const { id, forceSend } = await req.json();
   if (!id) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const result = await sendEmailByType({ email: entry.email, productSlug: entry.product });
+  const result = await sendEmailByType({ email: entry.email, productSlug: entry.product, forceSend });
   if (result.success) {
     await prisma.emailQueue.update({ where: { id }, data: { status: 'delivered' } });
     return NextResponse.json({ success: true });

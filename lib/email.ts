@@ -4,7 +4,11 @@ import { prisma } from "@/lib/prisma";
 
 type EmailType = "freebie" | "ebook" | "bundle" | "course" | "ai";
 
-const fromEmail = `deepdigidive <${process.env.EMAIL_FROM ?? "deepdigidive info@ubc-finance.com"}>`;
+function getFromEmail(type: EmailType) {
+  return type === "course"
+    ? `VIRAL UBC <info@ubc-finance.com>`
+    : `deepdigidive <info@ubc-finance.com>`;
+}
 
 const siteURL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ubc-finance.com";
 
@@ -68,6 +72,7 @@ export async function sendDownloadEmail(
     </div>
   `;
 
+  const fromEmail = getFromEmail(getEmailType(downloadSlug));
   const res = await resendClient.emails.send({
     from: fromEmail,
     to,
@@ -81,6 +86,7 @@ export async function sendDownloadEmail(
 export async function sendCustomEmail(to: string, subject: string, html: string) {
   if (!process.env.RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
 
+  const fromEmail = getFromEmail("ebook");
   const res = await resendClient.emails.send({
     from: fromEmail,
     to,
@@ -100,9 +106,11 @@ export async function sendCustomEmail(to: string, subject: string, html: string)
 export async function sendEmailByType({
   email,
   productSlug,
+  forceSend = false,
 }: {
-  email: string;
-  productSlug: string;
+  email: string
+  productSlug: string
+  forceSend?: boolean
 }): Promise<{ success: boolean; error?: string }> {
   if (!process.env.RESEND_API_KEY || !process.env.NEXT_PUBLIC_SITE_URL) {
     return { success: false, error: "Missing environment variables" };
@@ -112,18 +120,23 @@ export async function sendEmailByType({
   const product = products[productSlug];
   if (!product) return { success: false, error: "Invalid product slug" };
 
-  const alreadySent = await prisma.emailLog.findUnique({
+  const logEntry = await prisma.emailLog.findUnique({
     where: { email_template: { email, template: type } },
-  });
+  })
 
-  if (alreadySent) {
-    console.log("📭 Duplicate prevented for", email, productSlug);
-    return { success: true };
+  if (process.env.NODE_ENV === "production" && logEntry && logEntry.count >= 3 && !forceSend) {
+    return { success: true }
+  }
+
+  if (logEntry && !forceSend) {
+    console.log("📭 Duplicate prevented for", email, productSlug)
+    return { success: true }
   }
 
   const template = buildTemplate(type, productSlug);
 
   try {
+    const fromEmail = getFromEmail(type)
     const result = await resendClient.emails.send({
       from: fromEmail,
       to: email,
@@ -131,9 +144,16 @@ export async function sendEmailByType({
       html: template.html,
     });
 
-    await prisma.emailLog.create({
-      data: { email, product: productSlug, template: type },
-    });
+    if (logEntry) {
+      await prisma.emailLog.update({
+        where: { email_template: { email, template: type } },
+        data: { count: { increment: 1 }, sentAt: new Date() },
+      })
+    } else {
+      await prisma.emailLog.create({
+        data: { email, product: productSlug, template: type },
+      })
+    }
 
     console.log("✅ Email sent:", email, "Result:", result.id || "OK");
     return { success: true };
