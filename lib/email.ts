@@ -132,6 +132,16 @@ export async function sendEmailByType({
     return { success: true }
   }
 
+  // Check if this user already received this template type before.
+  const existingType = await prisma.emailLog.findFirst({
+    where: { email, template: type },
+  })
+  if (existingType) {
+    console.log('Existing type email for', email, type)
+    // Uncomment the next line to prevent re-sending the same template type.
+    // return { success: true }
+  }
+
   const tpl = buildTemplate(type, productSlug)
 
   console.log('[EMAIL DEBUG] RESEND key prefix:', process.env.RESEND_API_KEY?.slice(0, 4))
