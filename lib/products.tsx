@@ -53,8 +53,32 @@ What you’ll get:
 - Prompt stacking for advanced automations`,
     ctaLabel: "Buy for €27",
     isFree: false,
-    price: 27000,
+    price: 2700,
     image: "https://elements-resized.envatousercontent.com/elements-cover-images/387a5b14-4a51-4687-ad98-ed5dd60b438b?w=2038&cf_fit=scale-down&q=85&format=auto&s=4f687220929ad124afb790b76a04338a45362a9f529bbff4a3cf071b2023bc93",
     category: "product",
+  },
+  "content-automation": {
+    slug: "content-automation",
+    title: "Content Automation Toolkit",
+    description: "Templates and workflows to streamline your publishing pipeline.",
+    content: `
+Learn how to plan, create, and repurpose content so you never run out of ideas.
+Includes plug-and-play calendars and automation tips.
+    `,
+    ctaLabel: "Buy for €19",
+    isFree: false,
+    price: 1900,
+    image: "https://elements-resized.envatousercontent.com/elements-cover-images/387a5b14-4a51-4687-ad98-ed5dd60b438b?w=2038&cf_fit=scale-down&q=85&format=auto&s=4f687220929ad124afb790b76a04338a45362a9f529bbff4a3cf071b2023bc93",
+    category: "product",
+  },
+  "creator-bundle": {
+    slug: "creator-bundle",
+    title: "Creator Growth Bundle",
+    description: "Get all ebooks at a discounted price, plus future updates.",
+    ctaLabel: "Buy Bundle for €47",
+    isFree: false,
+    price: 4700,
+    image: "https://elements-resized.envatousercontent.com/elements-cover-images/387a5b14-4a51-4687-ad98-ed5dd60b438b?w=2038&cf_fit=scale-down&q=85&format=auto&s=4f687220929ad124afb790b76a04338a45362a9f529bbff4a3cf071b2023bc93",
+    category: "bundle",
   }
 }
