@@ -1,7 +1,7 @@
 // app/products/[slug]/page.tsx
 'use client'
 
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useState } from "react"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
@@ -16,7 +16,6 @@ export default function ProductPage() {
   const [showThankYou, setShowThankYou] = useState(false)
 
   const { slug } = useParams<{ slug: string }>()
-  const router = useRouter()
   const product = products[slug as string]
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
@@ -29,16 +28,12 @@ export default function ProductPage() {
 
   useEffect(() => {
     setShowThankYou(false)
-    setEmail("")
-    setPhone("")
-    setEmailSentTo("")
-    setShowEmailModal(false)
   }, [slug])
 
   useEffect(() => {
     const stored = typeof window !== 'undefined' ? localStorage.getItem('checkout-email') : null
     if (stored) setCheckoutEmail(stored)
-  }, [slug])
+  }, [])
 
   const handleFreeDownload = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -104,13 +99,13 @@ export default function ProductPage() {
     <>
     <section className="bg-[#0f0f1c] px-6 py-20 text-white">
       <div className="max-w-3xl mx-auto space-y-8">
-        <button
-          onClick={() => router.back()}
+        <Link
+          href="/products"
           className="inline-flex items-center text-yellow-300 text-sm hover:underline"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </button>
+          Back to Products
+        </Link>
 
         {product.image && (
           <Image
