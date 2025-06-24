@@ -9,10 +9,13 @@ import CourseFooterCTA from "@/components/sections/course/course-footer-cta"
 import CourseTestimonials from "@/components/sections/course/course-testimonials"
 import CourseInstructor from "@/components/sections/course/course-instructor"
 import CourseGuarantee from "@/components/sections/course/course-guarantee"
+import Header from "@/components/layout/header"
 
 export default function CoursePage() {
   return (
-    <main className="bg-[#0f0f1c] text-white">
+    <>
+      <Header />
+      <main className="bg-[#0f0f1c] text-white">
       {/* <main className="bg-[#0d1522] text-white"> */}
       <CourseHero />
       <CourseBenefits />
@@ -24,6 +27,7 @@ export default function CoursePage() {
       <CourseGuarantee />
       <CoursePrice />
       <CourseFooterCTA />
-    </main>
+      </main>
+    </>
   )
 }

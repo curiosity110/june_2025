@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button"
+import Header from "@/components/layout/header"
 
 export default function HeroSection() {
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg mt-10 relative">
+    <>
+      <Header />
+      <section className="bg-[#0f0f1c] px-6 py-20 rounded-xl max-w-6xl mx-auto shadow-lg mt-10 relative">
       <div className="flex flex-col gap-10 sm:flex-row justify-between items-start sm:items-center">
         <div className="max-w-2xl">
           <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-white mb-4 leading-tight">
@@ -19,6 +22,7 @@ export default function HeroSection() {
           <p className="text-xs text-text-soft">How can I help you?</p>
         </div>
       </div>
-    </section>
+      </section>
+    </>
   )
 }

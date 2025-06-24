@@ -1,13 +1,16 @@
 // ✅ app/thank-you/[slug]/page.tsx
 import { products } from "@/lib/products"
 import { notFound } from "next/navigation"
+import Header from "@/components/layout/header"
 
 export default function ThankYouPage({ params }: { params: { slug: string } }) {
   const product = products[params.slug]
   if (!product) return notFound()
 
   return (
-    <section className="px-6 py-24 text-white text-center">
+    <>
+      <Header />
+      <section className="px-6 py-24 text-white text-center">
       <h1 className="text-3xl font-bold text-yellow-300 mb-6">You're In!</h1>
       <p className="text-purple-300 text-lg mb-4">
         {product.isFree
@@ -21,6 +24,7 @@ export default function ThankYouPage({ params }: { params: { slug: string } }) {
       >
         Click here to download
       </a>
-    </section>
+      </section>
+    </>
   )
 }

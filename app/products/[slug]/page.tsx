@@ -9,6 +9,7 @@ import { products } from "@/lib/products"
 import Image from "next/image"
 import toast from "react-hot-toast"
 import { useEffect } from "react"
+import Header from "@/components/layout/header"
 
 
 export default function ProductPage() {
@@ -80,7 +81,9 @@ export default function ProductPage() {
   }
 
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20 text-white">
+    <>
+      <Header />
+      <section className="bg-[#0f0f1c] px-6 py-20 text-white">
       <div className="max-w-3xl mx-auto space-y-8">
         <Link
           href="/products"
@@ -160,6 +163,7 @@ export default function ProductPage() {
           )}
         </div>
       </div>
-    </section>
+      </section>
+    </>
   )
 }

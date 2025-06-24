@@ -2,7 +2,6 @@
 import "./globals.css"
 import { Inter, Space_Grotesk } from "next/font/google"
 import type { Metadata } from "next"
-import Header from "@/components/layout/header"
 import { Toaster } from "react-hot-toast"
 
 // Load Google Fonts with CSS variables
@@ -36,7 +35,6 @@ export default function RootLayout({
           font-sans bg-background text-white
         `}
       >
-        <Header />
         <Toaster position="top-center" />
         {/* ⚙️ This is where shared layout components go (Header, Footer, etc.) */}
         {children}
