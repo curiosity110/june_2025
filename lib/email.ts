@@ -1,4 +1,3 @@
-import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { products } from "@/lib/products";
 import { prisma } from "@/lib/prisma";
@@ -38,17 +37,7 @@ function buildTemplate(type: EmailType, slug: string) {
   };
 }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-const resendClient = process.env.RESEND_API_KEY
-  ? new Resend(process.env.RESEND_API_KEY)
-  : null;
+const resendClient = new Resend(process.env.RESEND_API_KEY || "");
 
 export async function sendDownloadEmail(
   to: string,
@@ -61,14 +50,14 @@ export async function sendDownloadEmail(
     return;
   }
 
-  if (!process.env.EMAIL_USER || !process.env.NEXT_PUBLIC_SITE_URL) {
+  if (!process.env.NEXT_PUBLIC_SITE_URL || !process.env.RESEND_API_KEY) {
     throw new Error("Missing required environment variables.");
   }
 
   const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/downloads/${downloadSlug}.pdf`;
 
-  await transporter.sendMail({
-    from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
+  await resendClient.emails.send({
+    from: "info@ubc-finance.com",
     to,
     subject: `Your Download: ${productName}`,
     html: `
@@ -95,26 +84,21 @@ export async function sendCustomEmail(to: string, subject: string, html: string)
     return
   }
 
-  if (!process.env.RESEND_API_KEY && !(process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
-    console.error('[EMAIL DEBUG] Missing RESEND_API_KEY or SMTP credentials')
-  }
-
-  if (!process.env.EMAIL_USER) {
-    throw new Error("Missing required environment variables.")
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('Missing RESEND_API_KEY')
   }
 
   console.log('[EMAIL DEBUG] RESEND key prefix:', process.env.RESEND_API_KEY?.slice(0, 4))
-  console.log('[EMAIL DEBUG] SMTP user exists:', !!process.env.EMAIL_USER)
   console.log('[EMAIL DEBUG] To:', to)
   console.log('[EMAIL DEBUG] Subject length:', subject.length, 'Body length:', html.length)
 
-  const info = await transporter.sendMail({
-    from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
+  const res = await resendClient.emails.send({
+    from: 'info@ubc-finance.com',
     to,
     subject,
     html,
   })
-  console.log('[EMAIL DEBUG] Nodemailer response:', info)
+  console.log('[EMAIL DEBUG] Resend response:', res)
 }
 
 export async function sendEmailByType({
@@ -124,8 +108,8 @@ export async function sendEmailByType({
   email: string
   productSlug: string
 }): Promise<{ success: boolean; error?: string }> {
-  if (!process.env.RESEND_API_KEY && !(process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
-    console.error('[EMAIL DEBUG] Missing RESEND_API_KEY or SMTP credentials')
+  if (!process.env.RESEND_API_KEY || !process.env.NEXT_PUBLIC_SITE_URL) {
+    return { success: false, error: 'Missing environment variables' }
   }
 
   const type = getEmailType(productSlug)
@@ -134,36 +118,37 @@ export async function sendEmailByType({
     return { success: false, error: 'Invalid product slug' }
   }
 
+  const startOfDay = new Date()
+  startOfDay.setHours(0, 0, 0, 0)
+  const existing = await prisma.emailLog.findFirst({
+    where: {
+      email,
+      product: productSlug,
+      sentAt: { gte: startOfDay },
+    },
+  })
+  if (existing) {
+    console.log('Duplicate send prevented for', email, productSlug)
+    return { success: true }
+  }
+
   const tpl = buildTemplate(type, productSlug)
 
   console.log('[EMAIL DEBUG] RESEND key prefix:', process.env.RESEND_API_KEY?.slice(0, 4))
-  console.log('[EMAIL DEBUG] SMTP creds present:', !!process.env.EMAIL_USER && !!process.env.EMAIL_PASS)
   console.log('[EMAIL DEBUG] To:', email)
   console.log('[EMAIL DEBUG] Subject length:', tpl.subject.length, 'Body length:', tpl.html.length)
 
   try {
     if (process.env.NODE_ENV === 'development') {
       console.log(`[DEV] Would send ${type} email to`, email)
-    } else if (resendClient) {
+    } else {
       const res = await resendClient.emails.send({
-        from: `"DeepDigiDive" <${process.env.EMAIL_USER || 'noreply@deepdigidive.com'}>`,
+        from: 'info@ubc-finance.com',
         to: email,
         subject: tpl.subject,
         html: tpl.html,
       })
       console.log('[EMAIL DEBUG] Resend response:', res)
-    } else {
-      if (!process.env.EMAIL_USER || !process.env.NEXT_PUBLIC_SITE_URL) {
-        throw new Error('Missing required environment variables.')
-      }
-
-      const info = await transporter.sendMail({
-        from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: tpl.subject,
-        html: tpl.html,
-      })
-      console.log('[EMAIL DEBUG] Nodemailer response:', info)
     }
 
     await prisma.emailLog.create({
@@ -173,6 +158,20 @@ export async function sendEmailByType({
     return { success: true }
   } catch (err: any) {
     console.error('sendEmailByType error:', err)
+    try {
+      await prisma.emailQueue.create({
+        data: {
+          email,
+          product: productSlug,
+          template: type,
+          retryAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          reason: err.message || 'send failure',
+          status: 'queued',
+        },
+      })
+    } catch (queueErr) {
+      console.error('Queue insert failed:', queueErr)
+    }
     return { success: false, error: err.message }
   }
 }

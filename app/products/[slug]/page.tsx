@@ -15,7 +15,7 @@ export default function ProductPage() {
 
   const [showThankYou, setShowThankYou] = useState(false)
 
-  const { slug } = useParams()
+  const { slug } = useParams<{ slug: string }>()
   const product = products[slug as string]
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
@@ -100,7 +100,7 @@ export default function ProductPage() {
     <section className="bg-[#0f0f1c] px-6 py-20 text-white">
       <div className="max-w-3xl mx-auto space-y-8">
         <Link
-          href="/"
+          href="/products"
           className="inline-flex items-center text-yellow-300 text-sm hover:underline"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
