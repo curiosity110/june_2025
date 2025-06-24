@@ -118,13 +118,12 @@ export async function sendEmailByType({
     return { success: false, error: 'Invalid product slug' }
   }
 
-  const startOfDay = new Date()
-  startOfDay.setHours(0, 0, 0, 0)
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000)
   const existing = await prisma.emailLog.findFirst({
     where: {
       email,
       product: productSlug,
-      sentAt: { gte: startOfDay },
+      sentAt: { gte: since },
     },
   })
   if (existing) {

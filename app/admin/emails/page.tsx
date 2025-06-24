@@ -4,12 +4,14 @@ import { useEffect, useState } from "react"
 
 export default function EmailLogPage() {
   const [auth, setAuth] = useState(false)
+  const [secret, setSecret] = useState('')
   const [logs, setLogs] = useState<any[]>([])
   const [queue, setQueue] = useState<any[]>([])
 
   useEffect(() => {
     const key = prompt('Enter admin secret:')
     if (key === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+      setSecret(key || '')
       setAuth(true)
     } else {
       alert('Unauthorized')
@@ -20,8 +22,8 @@ export default function EmailLogPage() {
     if (!auth) return
     const fetchData = async () => {
       const [logsRes, queueRes] = await Promise.all([
-        fetch(`/api/admin/email-logs?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`),
-        fetch(`/api/admin/email-queue?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`)
+        fetch(`/api/admin/email-logs?secret=${secret}`),
+        fetch(`/api/admin/email-queue?secret=${secret}`)
       ])
       const logData = await logsRes.json()
       const queueData = await queueRes.json()
@@ -29,10 +31,10 @@ export default function EmailLogPage() {
       setQueue(queueData.queue || [])
     }
     fetchData()
-  }, [auth])
+  }, [auth, secret])
 
   const retry = async (id: string) => {
-    await fetch(`/api/admin/retry-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+    await fetch(`/api/admin/retry-email?secret=${secret}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
