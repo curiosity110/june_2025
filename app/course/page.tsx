@@ -15,14 +15,14 @@ export default function CoursePage() {
     <main className="bg-[#0f0f1c] text-white">
       {/* <main className="bg-[#0d1522] text-white"> */}
       <CourseHero />
+      <CoursePrice />
       <CourseBenefits />
       <CourseHighlights />
       <CourseReasons />
-      <CourseInstructor />
-      <CourseTestimonials />
       <CourseBonuses />
       <CourseGuarantee />
-      <CoursePrice />
+      <CourseInstructor />
+      <CourseTestimonials />
       <CourseFooterCTA />
     </main>
   )
