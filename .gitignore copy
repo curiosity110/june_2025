@@ -1,0 +1,59 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Output
+.next/
+out/
+
+# Build
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Runtime
+*.pid
+*.seed
+*.pid.lock
+
+# Testing
+coverage/
+jest-cache/
+jest.config.js
+
+# Env & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.sqlite
+prisma/*.sqlite-journal
+
+# Vercel
+.vercel/
+
+# VSCode
+.vscode/
+
+# MacOS & system
+.DS_Store
+Thumbs.db
+
+# Optional: Nodemailer attachments, temp files
+tmp/
+temp/
+*.bak
+
+# Optional: Sentry/Telemetry
+.sentryclirc

@@ -13,7 +13,9 @@ import CourseGuarantee from "@/components/sections/course/course-guarantee"
 export default function CoursePage() {
   return (
     <main className="bg-[#0f0f1c] text-white">
+      {/* <main className="bg-[#0d1522] text-white"> */}
       <CourseHero />
+      <CoursePrice />
       <CourseBenefits />
       <CourseHighlights />
       <CourseReasons />
@@ -22,6 +24,10 @@ export default function CoursePage() {
       <CourseBonuses />
       <CourseGuarantee />
       <CoursePrice />
+      <CourseBonuses />
+      <CourseGuarantee />
+      <CourseInstructor />
+      <CourseTestimonials />
       <CourseFooterCTA />
     </main>
   )
