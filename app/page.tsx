@@ -12,6 +12,7 @@ export default function HomePage() {
       <FreebieSection />
       <ProductsSection />
       <BundleSection />
+      <LifetimeAccess />
       <TestimonialsSection />
       <Footer />
     </>

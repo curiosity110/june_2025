@@ -3,6 +3,11 @@ export default function TestimonialsSection() {
     { name: 'Alex', text: 'June helped me launch my first product in days.' },
     { name: 'Riley', text: 'The templates saved me weeks of work!' },
     { name: 'Jordan', text: 'Clean design and actionable advice. Love it.' }
+    { name: 'Jordan', text: 'Clean design and actionable advice. Love it.' },
+    { name: 'Ava K.', quote: 'These ebooks transformed my marketing strategy!' },
+    { name: 'Liam N.', quote: 'I doubled my sales in a week after reading them.' },
+    { name: 'Mia R.', quote: 'Finally feel like the smartest person in the room.' },
+    { name: 'Noah S.', quote: 'My business is thriving thanks to these tips.' },
   ]
   return (
     <section className="bg-[#0f0f1c] px-6 py-20">
@@ -18,5 +23,7 @@ export default function TestimonialsSection() {
         </div>
       </div>
     </section>
+  )
+}
   )
 }
