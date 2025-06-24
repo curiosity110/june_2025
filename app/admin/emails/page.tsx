@@ -30,16 +30,28 @@ export default function EmailLogPage() {
   return (
     <div className="p-6 text-white">
       <h1 className="text-2xl font-bold mb-4">📧 Email Send Log</h1>
-      <ul className="space-y-2">
-        {logs.map(log => (
-          <li key={log.id} className="bg-[#1f1f2e] p-4 rounded-md">
-            <p><strong>Email:</strong> {log.email}</p>
-            <p><strong>Product:</strong> {log.product}</p>
-            <p><strong>Template:</strong> {log.template}</p>
-            <p><strong>When:</strong> {new Date(log.sentAt).toLocaleString()}</p>
-          </li>
-        ))}
-      </ul>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-[#1f1f2e] rounded-md">
+          <thead>
+            <tr className="text-left bg-[#29293d]">
+              <th className="p-2">Email</th>
+              <th className="p-2">Product</th>
+              <th className="p-2">Template</th>
+              <th className="p-2">Sent At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log) => (
+              <tr key={log.id} className="border-t border-[#29293d]">
+                <td className="p-2">{log.email}</td>
+                <td className="p-2">{log.product}</td>
+                <td className="p-2 capitalize">{log.template}</td>
+                <td className="p-2">{new Date(log.sentAt).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
