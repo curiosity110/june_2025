@@ -8,7 +8,7 @@ export default function RetryButton({ id }: { id: string }) {
 
   const handleRetry = async () => {
     setLoading(true)
-    await fetch(`/api/admin/retry-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+    await fetch(`/api/admin/retry-email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, forceSend: force }),

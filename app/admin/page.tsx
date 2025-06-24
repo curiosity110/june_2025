@@ -12,25 +12,30 @@ export default function AdminDashboard() {
   const [status, setStatus] = useState("")
 
   useEffect(() => {
-    const existing = document.cookie.split('; ').find(c => c.startsWith('admin_secret='))?.split('=')[1]
-    if (existing === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
-      setAuth(true)
-      return
+    const verify = async () => {
+      const check = await fetch('/api/admin/check')
+      if (check.ok) { setAuth(true); return }
+      const key = prompt('Enter admin secret:')
+      if (!key) { alert('Unauthorized'); return }
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret: key })
+      })
+      if (res.ok) {
+        setAuth(true)
+      } else {
+        alert('Unauthorized')
+      }
     }
-    const key = prompt("Enter admin secret:")
-    if (key === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
-      document.cookie = `admin_secret=${key}; path=/; max-age=${60 * 60 * 24 * 30}`
-      setAuth(true)
-    } else {
-      alert("Unauthorized")
-    }
+    verify()
   }, [])
 
   useEffect(() => {
     if (!auth) return
 
     const fetchPurchases = async () => {
-      const res = await fetch(`/api/admin/purchases?slug=${slug}&secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`)
+      const res = await fetch(`/api/admin/purchases?slug=${slug}`)
       const data = await res.json()
       setPurchases(data.purchases || [])
     }
@@ -40,7 +45,7 @@ export default function AdminDashboard() {
 
   const sendEmail = async () => {
     setStatus("Sending...")
-    const res = await fetch(`/api/admin/send-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+    const res = await fetch(`/api/admin/send-email`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug, subject, message }),
