@@ -80,8 +80,8 @@ export default function ProductPage() {
   }
 
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20 text-white">
-      <div className="max-w-3xl mx-auto space-y-8">
+    <section className="bg-[#0d1522] px-6 py-20 text-white">
+      <div className="max-w-2xl mx-auto space-y-8">
         <Link
           href="/products"
           className="inline-flex items-center text-yellow-300 text-sm hover:underline"
@@ -104,7 +104,7 @@ export default function ProductPage() {
         <h1 className="text-3xl font-bold text-yellow-300">{product.title}</h1>
         <p className="text-purple-300">{product.description}</p>
 
-        <div className="bg-[#1f1f2e] border border-[#2c2c40] p-6 rounded-xl space-y-4">
+        <div className="bg-[#1a2238] border border-[#2c2c40] p-6 rounded-xl space-y-4">
           <pre className="text-sm whitespace-pre-wrap text-purple-200">
             {product.content}
           </pre>

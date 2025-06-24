@@ -13,8 +13,8 @@ const highlights = [
 
 export default function CourseHighlights() {
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20">
-      <div className="max-w-5xl mx-auto text-center space-y-8">
+    <section className="bg-[#0d1522] px-6 py-20">
+      <div className="max-w-4xl mx-auto text-center space-y-8">
         <h2 className="text-2xl sm:text-3xl font-heading font-bold text-yellow-300">
           What You'll Master
         </h2>

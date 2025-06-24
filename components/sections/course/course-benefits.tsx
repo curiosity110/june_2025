@@ -13,7 +13,7 @@ const benefits = [
 
 export default function CourseBenefits() {
   return (
-    <section className="bg-[#151525] py-16 px-6">
+    <section className="bg-[#101a2f] py-16 px-6">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-2xl sm:text-3xl font-heading font-bold text-yellow-300 mb-6">
           What’s Included

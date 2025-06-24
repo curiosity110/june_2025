@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 
 export default function CoursePrice() {
   return (
-    <section className="bg-[#151525] px-6 py-20 text-center">
+    <section className="bg-[#101a2f] px-6 py-20 text-center">
       <div className="max-w-xl mx-auto space-y-6">
         <h2 className="text-3xl font-heading font-bold text-yellow-300">
           Lifetime Access – One Payment Only

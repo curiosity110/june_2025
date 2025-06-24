@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 
 export default function LifetimeAccess() {
   return (
-    <section className="bg-[#151525] px-6 py-20 text-center text-white max-w-4xl mx-auto rounded-xl mt-12 shadow-lg">
+    <section className="bg-[#101a2f] px-6 py-20 text-center text-white max-w-3xl mx-auto rounded-xl mt-12 shadow-lg">
       <h2 className="text-3xl font-heading font-extrabold text-yellow-300 mb-4">
         Get Lifetime Access
       </h2>

@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button"
 
 export default function CourseHero() {
   return (
-    <section className="bg-[#0f0f1c] py-20 px-6">
-      <div className="max-w-5xl mx-auto text-center space-y-6">
+    <section className="bg-[#0d1522] py-20 px-6">
+      <div className="max-w-4xl mx-auto text-center space-y-6">
         <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-white">
           Ultimate Branding Course <br /> with <span className="text-purple-400">Master Resell Rights</span>
         </h1>

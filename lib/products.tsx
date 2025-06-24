@@ -24,7 +24,7 @@ This ebook gives you step-by-step strategies to:
 Perfect for anyone building a faceless brand, agency, or info product.`,
     ctaLabel: "Free Download",
     isFree: true,
-    image: "https://elements-resized.envatousercontent.com/elements-cover-images/387a5b14-4a51-4687-ad98-ed5dd60b438b?w=2038&cf_fit=scale-down&q=85&format=auto&s=4f687220929ad124afb790b76a04338a45362a9f529bbff4a3cf071b2023bc93",
+    image: "https://placehold.co/600x800/001f3f/ffffff.png?text=Organic+Growth",
     category: "product",
   },
   "affiliate-playbook": {
@@ -39,7 +39,7 @@ Inside you'll discover:
     ctaLabel: "Buy for €17",
     isFree: false,
     price: 1700,
-    image: "https://elements-resized.envatousercontent.com/elements-cover-images/387a5b14-4a51-4687-ad98-ed5dd60b438b?w=2038&cf_fit=scale-down&q=85&format=auto&s=4f687220929ad124afb790b76a04338a45362a9f529bbff4a3cf071b2023bc93",
+    image: "https://placehold.co/600x800/001f3f/ffffff.png?text=Affiliate+Playbook",
     category: "product",
   },
   "prompt-engineering": {
@@ -54,7 +54,7 @@ What you’ll get:
     ctaLabel: "Buy for €27",
     isFree: false,
     price: 27000,
-    image: "https://elements-resized.envatousercontent.com/elements-cover-images/387a5b14-4a51-4687-ad98-ed5dd60b438b?w=2038&cf_fit=scale-down&q=85&format=auto&s=4f687220929ad124afb790b76a04338a45362a9f529bbff4a3cf071b2023bc93",
+    image: "https://placehold.co/600x800/001f3f/ffffff.png?text=Prompt+Engineering",
     category: "product",
   }
 }

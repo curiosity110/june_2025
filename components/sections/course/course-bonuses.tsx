@@ -18,7 +18,7 @@ const bonuses = [
 
 export default function CourseBonuses() {
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20">
+    <section className="bg-[#0d1522] px-6 py-20">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-2xl sm:text-3xl font-heading font-bold text-yellow-300 mb-10">
           Fast-Action Bonuses

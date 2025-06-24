@@ -54,8 +54,8 @@ export default function ProductsPage() {
   const paidProducts = Object.values(products).filter(p => !p.isFree)
 
   return (
-    <section className="bg-[#0f0f1c] px-6 py-20">
-      <div className="max-w-6xl mx-auto space-y-12">
+    <section className="bg-[#0d1522] px-6 py-20">
+      <div className="max-w-5xl mx-auto space-y-12">
         <div className="text-center">
           <h1 className="text-4xl font-heading font-bold text-yellow-300">Digital Products</h1>
           <p className="text-purple-300 mt-4 max-w-xl mx-auto">
@@ -67,7 +67,7 @@ export default function ProductsPage() {
           <h2 className="text-xl text-white font-semibold mb-4">📬 Free Downloads</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {freeProducts.map((product) => (
-              <div key={product.slug} className="bg-[#151525] border border-[#2c2c40] p-6 rounded-xl shadow-md space-y-4 hover:shadow-xl transition-all duration-200">
+              <div key={product.slug} className="bg-[#101a2f] border border-[#2c2c40] p-6 rounded-xl shadow-md space-y-4 hover:shadow-xl transition-all duration-200">
                 <img src={product.image} alt={product.title} className="w-full rounded-lg border border-[#2c2c40]" />
                 <h3 className="text-xl font-bold text-white">{product.title}</h3>
                 <p className="text-purple-200 text-sm">{product.description}</p>
@@ -83,7 +83,7 @@ export default function ProductsPage() {
           <h2 className="text-xl text-white font-semibold mb-4 mt-12">💸 Premium Products</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {paidProducts.map((product) => (
-              <div key={product.slug} className="bg-[#151525] border border-[#2c2c40] p-6 rounded-xl shadow-md space-y-4 hover:shadow-xl transition-all duration-200">
+              <div key={product.slug} className="bg-[#101a2f] border border-[#2c2c40] p-6 rounded-xl shadow-md space-y-4 hover:shadow-xl transition-all duration-200">
                 <img src={product.image} alt={product.title} className="w-full rounded-lg border border-[#2c2c40]" />
                 <h3 className="text-xl font-bold text-white">{product.title}</h3>
                 <p className="text-purple-200 text-sm">{product.description}</p>
