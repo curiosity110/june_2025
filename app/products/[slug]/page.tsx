@@ -83,7 +83,7 @@ export default function ProductPage() {
     <section className="bg-[#0f0f1c] px-6 py-20 text-white">
       <div className="max-w-3xl mx-auto space-y-8">
         <Link
-          href="/products"
+          href="/"
           className="inline-flex items-center text-yellow-300 text-sm hover:underline"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
