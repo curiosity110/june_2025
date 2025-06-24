@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { sendDownloadEmail } from "@/lib/email";
+import { sendEmailByType } from "@/lib/email";
 
 export async function logPurchase(email: string, slug: string, opts?: { name?: string; phone?: string }) {
   await prisma.purchase.create({
@@ -12,5 +12,5 @@ export async function logPurchase(email: string, slug: string, opts?: { name?: s
     },
   });
 
-  await sendDownloadEmail(email, slug, slug, opts?.phone);
+  await sendEmailByType({ email, productSlug: slug });
 }
