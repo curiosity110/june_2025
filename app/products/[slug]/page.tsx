@@ -59,18 +59,14 @@ export default function ProductPage() {
     setLoading(true)
 
     try {
-      const res = await fetch("/api/checkout", {
+      await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug }),
       })
 
-      const data = await res.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        alert("Something went wrong.")
-      }
+      // In dummy mode we simply redirect to the thank-you page
+      window.location.href = `/thank-you/${slug}`
     } catch (err) {
       console.error("Checkout error:", err)
       alert("Failed to start checkout.")
