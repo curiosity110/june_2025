@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   if (secret !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { product, status, email } = await req.json();
+  const { product, status, email, forceSend } = await req.json();
 
   const queue = await prisma.emailQueue.findMany({
     where: {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   let count = 0;
   for (const entry of queue) {
-    const result = await sendEmailByType({ email: entry.email, productSlug: entry.product });
+    const result = await sendEmailByType({ email: entry.email, productSlug: entry.product, forceSend });
     if (result.success) {
       await prisma.emailQueue.update({ where: { id: entry.id }, data: { status: "delivered" } });
       count++;

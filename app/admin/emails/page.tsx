@@ -16,7 +16,7 @@ interface SearchParams {
 export const dynamic = 'force-dynamic'
 
 export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
-  const cookie = cookies().get('admin_secret')?.value
+  const cookie = await cookies().get('admin_secret')?.value
   if (cookie !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
     return <div className="p-6 text-white">Unauthorized</div>
   }
@@ -36,6 +36,17 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
     },
     orderBy: { retryAt: 'desc' },
   })
+
+  const logCounts = await prisma.emailLog.findMany({
+    where: {
+      OR: queue.map((q) => ({ email: q.email, template: q.template })),
+    },
+    select: { email: true, template: true, count: true },
+  })
+  const countMap: Record<string, number> = {}
+  for (const l of logCounts) {
+    countMap[`${l.email}-${l.template}`] = l.count
+  }
 
   return (
     <div className="p-6 text-white">
@@ -122,6 +133,7 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
                 <th className="p-2">Product</th>
                 <th className="p-2">Retry At</th>
                 <th className="p-2">Status</th>
+                <th className="p-2">Count</th>
                 <th className="p-2">Action</th>
               </tr>
             </thead>
@@ -132,6 +144,7 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
                   <td className="p-2">{q.product}</td>
                   <td className="p-2">{q.retryAt.toLocaleString()}</td>
                   <td className="p-2 capitalize">{q.status}</td>
+                  <td className="p-2">{countMap[`${q.email}-${q.template}`] ?? 0}</td>
                   <td className="p-2">
                     <RetryButton id={q.id} />
                   </td>
