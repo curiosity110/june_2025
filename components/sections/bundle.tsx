@@ -22,6 +22,5 @@ export default function BundleSection() {
         </div>
       </div>
     </section>
-
   )
 }
