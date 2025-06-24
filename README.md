@@ -14,6 +14,7 @@
 3. Add `.env.local` with:
    - `STRIPE_SECRET_KEY=`
    - `RESEND_API_KEY=`
+   - `OPENAI_API_KEY=`
 4. Run `npm run dev`
 5. Deploy with Vercel
 
@@ -21,4 +22,5 @@
 - `/` – Landing Page
 - `/course` – Course
 - `/products` – eBooks
-- `/thank-you` – After purchase# june_2025
+- `/thank-you` – After purchase
+- Includes AI chat widget powered by OpenAI
