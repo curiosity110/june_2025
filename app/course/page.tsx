@@ -19,6 +19,11 @@ export default function CoursePage() {
       <CourseBenefits />
       <CourseHighlights />
       <CourseReasons />
+      <CourseInstructor />
+      <CourseTestimonials />
+      <CourseBonuses />
+      <CourseGuarantee />
+      <CoursePrice />
       <CourseBonuses />
       <CourseGuarantee />
       <CourseInstructor />
