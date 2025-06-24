@@ -22,8 +22,11 @@ model EmailLog {
   id        String   @id @default(uuid())
   email     String
   product   String
-  template  String   // 'freebie', 'ebook', etc.
+  template  String
+  count     Int      @default(1)
   sentAt    DateTime @default(now())
+
+  @@unique([email, template])
 }
 
 model EmailQueue {
