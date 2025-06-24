@@ -8,14 +8,14 @@ const i = 'icloud.com';
 const g = 'gmail.com';
 const m = 'hotmail.com';
 
-let emails = ['vaskodedejski@hotmail.com', 'Dlgiolazo845@gmail.com', 'bedohassan24@gmail.com', 'mdimova97@yahoo.com', 'Misheva.09@outlook.com', 'igornikolov11@gmail.com']
-
 
 const recipients = [
-    `gjorgidelev98@${i}`,
-    `ki_kodelev@${m}`,
-    //   `gjorgidelev98@${i}`,
-    // Add more here
+    `gjorgidelev98@gmail.com`,
+    'delevdzoce@gmail.com',
+    'dzoko.d@hotmail.com',
+    'deepdigidive@gmail.com',
+    'luckpower98@gmail.com',
+    'georgiedelev@gmail.com',
 ];
 export async function GET() {
     const resend = new Resend(process.env.RESEND_API_KEY!);

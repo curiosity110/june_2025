@@ -10,6 +10,7 @@ const siteURL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ubc-finance.com";
 
 const resendClient = new Resend(process.env.RESEND_API_KEY || "");
 
+
 function getEmailType(slug: string): EmailType {
   const product = products[slug];
   if (!product) return "ebook";
