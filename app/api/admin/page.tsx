@@ -49,7 +49,10 @@ export default function AdminDashboard() {
     }
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 186c96f (feat(admin): add bulk email)
   if (!auth) return null
 
   return (
