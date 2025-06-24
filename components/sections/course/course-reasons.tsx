@@ -11,9 +11,9 @@ const reasons = [
 
 export default function CourseReasons() {
   return (
-    <section className="bg-[#151525] px-6 py-20">
+    <section className="bg-card px-6 py-20">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-yellow-300 mb-8">
+        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-accent mb-8">
           Why Choose This Course?
         </h2>
         <ul className="grid gap-4 text-left text-white text-sm sm:text-base max-w-2xl mx-auto">

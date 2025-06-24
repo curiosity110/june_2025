@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button"
 
 export default function CoursePrice() {
   return (
-    <section className="bg-[#151525] px-6 py-20 text-center">
+    <section className="bg-card px-6 py-20 text-center">
       <div className="max-w-xl mx-auto space-y-6">
-        <h2 className="text-3xl font-heading font-bold text-yellow-300">
+        <h2 className="text-3xl font-heading font-bold text-accent">
           Lifetime Access – One Payment Only
         </h2>
 
@@ -13,10 +13,10 @@ export default function CoursePrice() {
           Get the full Ultimate Branding Course, Resell Rights, bonuses, updates, and access — forever.
         </p>
 
-        <div className="inline-block bg-[#1f1f2e] border border-[#2c2c40] px-10 py-8 rounded-xl shadow-md">
-          <p className="text-5xl font-extrabold text-yellow-400 mb-2">€497</p>
+        <div className="inline-block bg-card border border-border px-10 py-8 rounded-xl shadow-md">
+          <p className="text-5xl font-extrabold text-accent mb-2">€497</p>
           <p className="text-sm text-purple-200 mb-4 line-through">€997 regular price</p>
-          <Button className="text-black bg-yellow-400 font-bold text-sm px-8 py-4 hover:scale-105 transition">
+          <Button className="text-black bg-highlight font-bold text-sm px-8 py-4 hover:scale-105 transition">
             Get Instant Access
           </Button>
         </div>

@@ -1,3 +1,4 @@
+"use client"
 // app/layout.tsx
 import "./globals.css"
 import { Inter, Space_Grotesk } from "next/font/google"
@@ -21,6 +22,35 @@ export const metadata: Metadata = {
   description: "A premium digital shop offering AI-powered marketing tips, branding guides, and expert ebooks.",
 }
 
+import { ThemeProvider, useTheme } from "@/components/context/theme-context"
+
+function BodyWrapper({ children }: { children: React.ReactNode }) {
+  const { theme, layout, animation } = useTheme()
+  return (
+    <body
+      className={`
+        ${inter.variable} ${spaceGrotesk.variable}
+        font-sans text-white theme-${theme} layout-${layout}
+      `}
+    >
+      <div className={`relative group ${layout === "wide" ? "" : "max-w-6xl mx-auto"}`}>        
+        <Header />
+        <Toaster position="top-center" />
+        {process.env.DUMMY_PAYMENT_MODE === "true" && (
+          <div className="bg-red-600 text-center text-sm py-2">
+            Payments are simulated for testing. No real transaction is made.
+          </div>
+        )}
+
+        {/* App content */}
+        <main className={animation === "fade" ? "animate-fade" : "animate-slide"}>
+          {children}
+        </main>
+      </div>
+    </body>
+  )
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -28,28 +58,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body
-        className={`
-          ${inter.variable} ${spaceGrotesk.variable}
-          font-sans bg-background text-white
-        `}
-      >
-        {/* Fancy glow container */}
-        <div className="relative group max-w-6xl mx-auto">
-            <Header />
-            <Toaster position="top-center" />
-            {process.env.DUMMY_PAYMENT_MODE === "true" && (
-              <div className="bg-red-600 text-center text-sm py-2">
-                Payments are simulated for testing. No real transaction is made.
-              </div>
-            )}
-            
-            {/* App content */}
-            <main>
-              {children}
-            </main>
-          </div>
-      </body>
+      <ThemeProvider>
+        <BodyWrapper>{children}</BodyWrapper>
+      </ThemeProvider>
     </html>
   )
 }
