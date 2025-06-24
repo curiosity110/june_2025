@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 export default function EmailLogPage() {
   const [auth, setAuth] = useState(false)
   const [logs, setLogs] = useState<any[]>([])
+  const [queue, setQueue] = useState<any[]>([])
 
   useEffect(() => {
     const key = prompt('Enter admin secret:')
@@ -17,13 +18,27 @@ export default function EmailLogPage() {
 
   useEffect(() => {
     if (!auth) return
-    const fetchLogs = async () => {
-      const res = await fetch(`/api/admin/email-logs?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`)
-      const data = await res.json()
-      setLogs(data.logs || [])
+    const fetchData = async () => {
+      const [logsRes, queueRes] = await Promise.all([
+        fetch(`/api/admin/email-logs?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`),
+        fetch(`/api/admin/email-queue?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`)
+      ])
+      const logData = await logsRes.json()
+      const queueData = await queueRes.json()
+      setLogs(logData.logs || [])
+      setQueue(queueData.queue || [])
     }
-    fetchLogs()
+    fetchData()
   }, [auth])
+
+  const retry = async (id: string) => {
+    await fetch(`/api/admin/retry-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    })
+    location.reload()
+  }
 
   if (!auth) return null
 
@@ -52,6 +67,35 @@ export default function EmailLogPage() {
           </tbody>
         </table>
       </div>
+      {queue.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-2">Queued Emails</h2>
+          <table className="min-w-full bg-[#1f1f2e] rounded-md">
+            <thead>
+              <tr className="text-left bg-[#29293d]">
+                <th className="p-2">Email</th>
+                <th className="p-2">Product</th>
+                <th className="p-2">Retry At</th>
+                <th className="p-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {queue.map((q) => (
+                <tr key={q.id} className="border-t border-[#29293d]">
+                  <td className="p-2">{q.email}</td>
+                  <td className="p-2">{q.product}</td>
+                  <td className="p-2">{new Date(q.retryAt).toLocaleString()}</td>
+                  <td className="p-2">
+                    <button className="text-yellow-300" onClick={() => retry(q.id)}>
+                      Retry
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
