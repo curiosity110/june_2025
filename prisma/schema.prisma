@@ -19,11 +19,22 @@ model Purchase {
 
 
 model EmailLog {
-  id          String   @id @default(uuid())
-  email       String
-  product     String
-  template    String   // 'freebie', 'ebook', etc.
-  sentAt      DateTime @default(now())
+  id        String   @id @default(uuid())
+  email     String
+  product   String
+  template  String   // 'freebie', 'ebook', etc.
+  sentAt    DateTime @default(now())
+}
+
+model EmailQueue {
+  id        String   @id @default(uuid())
+  email     String
+  product   String
+  template  String
+  retryAt   DateTime
+  reason    String
+  status    String   // 'queued', 'failed', 'delivered'
+  createdAt DateTime @default(now())
 }
 
 model AiSession {
