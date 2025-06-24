@@ -1,4 +1,41 @@
 import nodemailer from "nodemailer";
+import { products } from "@/lib/products";
+import { prisma } from "@/lib/prisma";
+
+type EmailType = "freebie" | "ebook" | "bundle" | "course" | "ai";
+
+function getEmailType(slug: string): EmailType {
+  const product = products[slug];
+  if (!product) return "ebook";
+  if (product.isFree) return "freebie";
+  if (product.category === "bundle") return "bundle";
+  if (product.category === "course" || slug.includes("course")) return "course";
+  if (slug.includes("ai")) return "ai";
+  return "ebook";
+}
+
+function buildTemplate(type: EmailType, slug: string) {
+  const product = products[slug];
+  const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/downloads/${slug}.pdf`;
+  let bonus = "Thanks for being part of our community!";
+  if (type === "bundle") bonus = "Enjoy your bundle with all future updates.";
+  if (type === "course") bonus = "Welcome to the course! Check your dashboard for updates.";
+  if (type === "ai") bonus = "Unlock AI bonuses inside the download.";
+  if (type === "freebie") bonus = "Here's your free resource.";
+
+  return {
+    subject: `Your ${product.title}`,
+    html: `
+      <div style="font-family: sans-serif; padding: 20px;">
+        <h2 style="color: #eab308;">${product.title}</h2>
+        <p>${product.description}</p>
+        <a href="${downloadUrl}" style="display:inline-block;padding:12px 24px;background-color:#facc15;color:black;font-weight:bold;text-decoration:none;border-radius:8px;">Download</a>
+        <p style="margin-top:20px">${bonus}</p>
+        <p style="font-size:12px;color:#999">Need help? Reply to this email.</p>
+      </div>
+    `,
+  };
+}
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -62,5 +99,38 @@ export async function sendCustomEmail(to: string, subject: string, html: string)
     to,
     subject,
     html,
+  })
+}
+
+export async function sendEmailByType({
+  email,
+  productSlug,
+}: {
+  email: string
+  productSlug: string
+}) {
+  const type = getEmailType(productSlug)
+  const product = products[productSlug]
+  if (!product) throw new Error('Invalid product slug')
+
+  const tpl = buildTemplate(type, productSlug)
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[DEV] Would send ${type} email to`, email)
+  } else {
+    if (!process.env.EMAIL_USER || !process.env.NEXT_PUBLIC_SITE_URL) {
+      throw new Error('Missing required environment variables.')
+    }
+
+    await transporter.sendMail({
+      from: `"DeepDigiDive" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: tpl.subject,
+      html: tpl.html,
+    })
+  }
+
+  await prisma.emailLog.create({
+    data: { email, product: productSlug, template: type },
   })
 }

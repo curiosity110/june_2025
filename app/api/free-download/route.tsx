@@ -1,6 +1,6 @@
 //app/api/free-download/route.ts
 import { NextResponse } from "next/server"
-import { sendDownloadEmail } from "@/lib/email"
+import { sendEmailByType } from "@/lib/email"
 import { products } from "@/lib/products"
 
 export async function POST(req: Request) {
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Invalid request" }, { status: 400 })
     }
 
-    await sendDownloadEmail(email, product.title, slug, phone)
+    await sendEmailByType({ email, productSlug: slug })
 
     return NextResponse.json({ success: true })
   } catch (err) {
