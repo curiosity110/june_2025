@@ -10,9 +10,11 @@
 :root {
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Space Grotesk', sans-serif;
+  padding: 5%
 }
 
 /* ✅ Global body defaults */
 body {
-  @apply bg-[#0f0f1c] text-white font-sans antialiased;
+  /* @apply bg-[#0f0f1c] text-white font-sans antialiased; */
+  @apply bg-[#0b081c] text-white font-sans antialiased p-[5%];
 }
