@@ -8,6 +8,7 @@ export default function FreebieSection() {
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
+  const [link, setLink] = useState('')
 
   if (!freeProduct) return null
 
@@ -20,7 +21,9 @@ export default function FreebieSection() {
       body: JSON.stringify({ slug: freeProduct.slug, email, phone })
     })
     if (res.ok) {
+      const data = await res.json()
       setSent(true)
+      if (data.downloadUrl) setLink(data.downloadUrl)
       setEmail('')
       setPhone('')
     }
@@ -58,7 +61,13 @@ export default function FreebieSection() {
             {loading ? 'Sending...' : freeProduct.ctaLabel}
           </button>
           {sent && (
-            <p className="text-green-400 text-sm mt-2">Check your inbox for the download!</p>
+            <p className="text-green-400 text-sm mt-2">
+              Your download is ready{' '}
+              <a href={link} className="underline" download>
+                click here
+              </a>{' '}
+              and check your inbox for a copy.
+            </p>
           )}
         </form>
       </div>

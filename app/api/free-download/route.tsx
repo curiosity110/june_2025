@@ -18,7 +18,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: result.error || 'Email failed' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true })
+    const downloadUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/downloads/${slug}.pdf`
+
+    return NextResponse.json({ success: true, downloadUrl })
   } catch (err) {
     console.error("🔥 API /free-download error:", err)
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 })
