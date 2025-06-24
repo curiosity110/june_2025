@@ -4,6 +4,7 @@ import Link from 'next/link'
 import RetryButton from './RetryButton'
 import RetryAllButton from './RetryAllButton'
 import SendEmailPanel from './SendEmailPanel'
+import { cookies } from 'next/headers'
 
 interface SearchParams {
   tab?: string
@@ -15,6 +16,11 @@ interface SearchParams {
 export const dynamic = 'force-dynamic'
 
 export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
+  const cookie = cookies().get('admin_secret')?.value
+  if (cookie !== process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+    return <div className="p-6 text-white">Unauthorized</div>
+  }
+
   const { tab = 'sent', product, status, email } = searchParams
 
   const logs = await prisma.emailLog.findMany({
