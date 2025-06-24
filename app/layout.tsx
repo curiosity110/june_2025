@@ -38,6 +38,11 @@ export default function RootLayout({
         <div className="relative group max-w-6xl mx-auto">
             <Header />
             <Toaster position="top-center" />
+            {process.env.DUMMY_PAYMENT_MODE === "true" && (
+              <div className="bg-red-600 text-center text-sm py-2">
+                Payments are simulated for testing. No real transaction is made.
+              </div>
+            )}
             
             {/* App content */}
             <main>
