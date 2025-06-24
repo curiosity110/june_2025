@@ -1,50 +1,75 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 export default function EmailLogPage() {
-  const [auth, setAuth] = useState(false)
-  const [logs, setLogs] = useState<any[]>([])
-  const [queue, setQueue] = useState<any[]>([])
+  const [auth, setAuth] = useState(false);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [queue, setQueue] = useState<any[]>([]);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    const key = prompt('Enter admin secret:')
+    const key = prompt("Enter admin secret:");
     if (key === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
-      setAuth(true)
+      setAuth(true);
     } else {
-      alert('Unauthorized')
+      alert("Unauthorized");
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!auth) return
+    if (!auth) return;
     const fetchData = async () => {
       const [logsRes, queueRes] = await Promise.all([
-        fetch(`/api/admin/email-logs?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`),
-        fetch(`/api/admin/email-queue?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`)
-      ])
-      const logData = await logsRes.json()
-      const queueData = await queueRes.json()
-      setLogs(logData.logs || [])
-      setQueue(queueData.queue || [])
-    }
-    fetchData()
-  }, [auth])
+        fetch(
+          `/api/admin/email-logs?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`,
+        ),
+        fetch(
+          `/api/admin/email-queue?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`,
+        ),
+      ]);
+      const logData = await logsRes.json();
+      const queueData = await queueRes.json();
+      setLogs(logData.logs || []);
+      setQueue(queueData.queue || []);
+    };
+    fetchData();
+  }, [auth]);
 
   const retry = async (id: string) => {
-    await fetch(`/api/admin/retry-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id })
-    })
-    location.reload()
-  }
+    await fetch(
+      `/api/admin/retry-email?secret=${process.env.NEXT_PUBLIC_ADMIN_SECRET}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      },
+    );
+    location.reload();
+  };
 
-  if (!auth) return null
+  const filteredLogs = logs.filter(
+    (l) =>
+      l.email.toLowerCase().includes(filter.toLowerCase()) ||
+      l.product.toLowerCase().includes(filter.toLowerCase()),
+  );
+  const filteredQueue = queue.filter(
+    (q) =>
+      q.email.toLowerCase().includes(filter.toLowerCase()) ||
+      q.product.toLowerCase().includes(filter.toLowerCase()),
+  );
+
+  if (!auth) return null;
 
   return (
     <div className="p-6 text-white">
       <h1 className="text-2xl font-bold mb-4">📧 Email Send Log</h1>
+      <input
+        className="bg-black text-white border border-gray-500 rounded px-3 py-1 mb-4"
+        placeholder="Filter by email or product"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
       <div className="overflow-x-auto">
         <table className="min-w-full bg-[#1f1f2e] rounded-md">
           <thead>
@@ -56,7 +81,7 @@ export default function EmailLogPage() {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
+            {filteredLogs.map((log) => (
               <tr key={log.id} className="border-t border-[#29293d]">
                 <td className="p-2">{log.email}</td>
                 <td className="p-2">{log.product}</td>
@@ -80,13 +105,18 @@ export default function EmailLogPage() {
               </tr>
             </thead>
             <tbody>
-              {queue.map((q) => (
+              {filteredQueue.map((q) => (
                 <tr key={q.id} className="border-t border-[#29293d]">
                   <td className="p-2">{q.email}</td>
                   <td className="p-2">{q.product}</td>
-                  <td className="p-2">{new Date(q.retryAt).toLocaleString()}</td>
                   <td className="p-2">
-                    <button className="text-yellow-300" onClick={() => retry(q.id)}>
+                    {new Date(q.retryAt).toLocaleString()}
+                  </td>
+                  <td className="p-2">
+                    <button
+                      className="text-yellow-300"
+                      onClick={() => retry(q.id)}
+                    >
                       Retry
                     </button>
                   </td>
@@ -97,5 +127,5 @@ export default function EmailLogPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
