@@ -16,3 +16,21 @@ model Purchase {
   type         String   // "ebook" or "course"
   createdAt    DateTime @default(now())
 }
+
+
+model EmailLog {
+  id          String   @id @default(uuid())
+  email       String
+  product     String
+  template    String   // 'freebie', 'ebook', etc.
+  sentAt      DateTime @default(now())
+}
+
+model AiSession {
+  id          String   @id @default(uuid())
+  email       String?
+  ip          String
+  creditsUsed Int
+  messages    Json     // store short log of messages
+  createdAt   DateTime @default(now())
+}
