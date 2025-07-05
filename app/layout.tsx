@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 })
 
-export const metadata: Metadata = {
+export let metadata: Metadata = {
   title: "June — The Ultimate Branding Course",
   description: "A premium digital shop offering AI-powered marketing tips, branding guides, and expert ebooks.",
 }
