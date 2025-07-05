@@ -1,9 +1,5 @@
-ignoredBuiltDependencies:
+packages:
+  - 'apps/*'
+  - 'packages/*'
+ignoredDependencies:
   - '@prisma/engines'
-  - ngrok
-
-onlyBuiltDependencies:
-  - '@prisma/client'
-  - '@tailwindcss/oxide'
-  - prisma
-  - sharp
