@@ -1,7 +1,7 @@
 // /app/api/send-bulk-email/route.ts
 
 import { Resend } from "resend";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "db/client";
 
 
 const i = 'icloud.com';

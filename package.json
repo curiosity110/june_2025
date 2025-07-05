@@ -8,10 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "move-to-packages": "ts-node scripts/move-to-packages.ts",
-    "test": "playwright test"
+    "test": "playwright test",
+    "db:generate": "prisma generate --schema packages/db/prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema packages/db/prisma/schema.prisma",
+    "postinstall": "pnpm db:generate"
   },
   "dependencies": {
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "6.11.1",
     "@tailwindcss/typography": "^0.5.16",
     "clsx": "^2.1.1",
     "lucide-react": "^0.515.0",
@@ -34,7 +37,7 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.5",
     "prettier": "3.6.0",
-    "prisma": "^6.10.1",
+    "prisma": "6.11.1",
     "tailwindcss": "^4.1.10",
     "typescript": "^5",
     "@playwright/test": "^1.44.0"

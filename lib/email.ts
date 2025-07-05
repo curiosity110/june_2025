@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import { products } from "@/lib/products";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "db/client";
 
 type EmailType = "freebie" | "ebook" | "bundle" | "course" | "ai";
 
