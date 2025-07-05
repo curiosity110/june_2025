@@ -20,3 +20,10 @@
 - `/course` – Course
 - `/products` – eBooks
 - `/thank-you` – After purchase# june_2025
+
+## Moving files to packages
+Run the helper script to keep imports working when moving files:
+
+```bash
+pnpm move-to-packages components/ui/button.tsx ui
+```
