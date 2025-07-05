@@ -1,26 +1,22 @@
-# deepdigidive - E-Commerce Starter
+#   deepdigidive - E-Commerce Starter
 
-This repository contains a turborepo workspace for a digital products
-store built with **Next.js 15.3** and **React 19**. Payments are handled
-via Stripe invoices and authentication via NextAuth.
+## 🧩 Stack
+- Next.js 14
+- Tailwind CSS
+- shadcn/ui
+- Stripe for payments
+- Resend for email
+- MDX for content
 
-## Quick Start
+## 🛠 Quick Build Steps
+1. Clone this repo
+2. Run `npm install`
+3. Copy `.env.local.example` to `.env.local` and fill in values (including `ADMIN_SECRET`).
+4. Run `npm run dev`
+5. Deploy with Vercel
 
-```bash
-pnpm install
-pnpm dev
-```
-
-Environment variables are defined in `.env.example`. See
-`docs/deployment.md` for a full list.
-
-## Packages
-
-- `apps/web` – storefront and admin pages
-- `packages/ui` – shadcn/ui based components
-- `packages/config` – shared ESLint/Prettier/Tailwind config
-
-## Further Documentation
-
-- [Architecture](docs/architecture.md)
-- [Deployment](docs/deployment.md)
+## 🧱 Pages
+- `/` – Landing Page
+- `/course` – Course
+- `/products` – eBooks
+- `/thank-you` – After purchase# june_2025
