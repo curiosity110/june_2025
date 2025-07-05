@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from 'db/client'
 import { products } from '@/lib/products'
 import Link from 'next/link'
 import RetryButton from './RetryButton'

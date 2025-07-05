@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "db/client";
 import { sendEmailByType } from "@/lib/email";
 
 export async function logPurchase(email: string, slug: string, opts?: { name?: string; phone?: string }) {

@@ -5,6 +5,8 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/db"
+  previewFeatures = ["driverAdapters"]
 }
 
 model Purchase {

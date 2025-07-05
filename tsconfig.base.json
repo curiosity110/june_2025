@@ -34,6 +34,9 @@
       ],
       "server/*": [
         "packages/server/src/*"
+      ],
+      "db/*": [
+        "packages/db/src/*"
       ]
     },
     "baseUrl": "."

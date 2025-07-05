@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "db/client";
 import { Resend } from "resend";
 import { cookies } from "next/headers";
 

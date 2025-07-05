@@ -19,7 +19,9 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Generate Prisma Client
+        run: pnpm db:generate
       - name: Lint, test, build
-        run: pnpm turbo run lint test build --filter=!packages/*
+        run: pnpm turbo run lint test build --filter=!packages/ui --filter=!packages/server
       - name: Lighthouse budget check
         run: pnpm lighthouse-ci http://localhost:3000 --budget-path=.lighthousebudget.json
