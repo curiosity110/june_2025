@@ -4,4 +4,5 @@
   "private": true,
   "publishConfig": { "private": true },
   "exports": "./src"
+  
 }
