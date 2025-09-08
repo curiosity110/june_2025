@@ -5,7 +5,7 @@ import { cookies } from "next/headers"
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const slug = searchParams.get("slug")
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const secret = cookieStore.get("admin_secret")?.value
 
   if (secret !== process.env.ADMIN_SECRET) {

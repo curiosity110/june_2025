@@ -3,7 +3,7 @@ import { prisma } from "db/client"
 import { cookies } from "next/headers"
 
 export async function GET(req: Request) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const secret = cookieStore.get("admin_secret")?.value
 
   if (secret !== process.env.ADMIN_SECRET) {

@@ -12,7 +12,9 @@ function getFromEmail(type: EmailType) {
 
 const siteURL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ubc-finance.com";
 
-const resendClient = new Resend(process.env.RESEND_API_KEY || "");
+const resendClient = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 
 function getEmailType(slug: string): EmailType {
@@ -34,8 +36,9 @@ function buildTemplate(type: EmailType, slug: string) {
     course: "Welcome to the course! Check your dashboard for updates.",
     ai: "Unlock AI bonuses inside the download.",
     freebie: "Here's your free resource.",
+    ebook: "Enjoy your download.",
     default: "Thanks for being part of our community!",
-  };
+  } as Record<EmailType | "default", string>;
 
   return {
     subject: `Your ${product?.title || "Download"}`,
@@ -72,6 +75,10 @@ export async function sendDownloadEmail(
     </div>
   `;
 
+  if (!resendClient) {
+    console.warn("Resend API key missing; email not sent");
+    return;
+  }
   const fromEmail = getFromEmail(getEmailType(downloadSlug));
   const res = await resendClient.emails.send({
     from: fromEmail,
@@ -84,7 +91,7 @@ export async function sendDownloadEmail(
 }
 
 export async function sendCustomEmail(to: string, subject: string, html: string) {
-  if (!process.env.RESEND_API_KEY) throw new Error("Missing RESEND_API_KEY");
+  if (!resendClient) throw new Error("Missing RESEND_API_KEY");
 
   const fromEmail = getFromEmail("ebook");
   const res = await resendClient.emails.send({
@@ -136,6 +143,9 @@ export async function sendEmailByType({
   const template = buildTemplate(type, productSlug);
 
   try {
+    if (!resendClient) {
+      throw new Error("Missing RESEND_API_KEY");
+    }
     const fromEmail = getFromEmail(type)
     const result = await resendClient.emails.send({
       from: fromEmail,
@@ -155,7 +165,7 @@ export async function sendEmailByType({
       })
     }
 
-    console.log("✅ Email sent:", email, "Result:", result.id || "OK");
+    console.log("✅ Email sent:", email, "Result:", (result as any).id || "OK");
     return { success: true };
   } catch (err: any) {
     console.error("❌ sendEmailByType failed:", err.message);

@@ -2,7 +2,16 @@ import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-export const prisma =
-  globalForPrisma.prisma ?? new PrismaClient().$extends({});
+let prismaInstance: PrismaClient;
+try {
+  prismaInstance =
+    globalForPrisma.prisma ?? new PrismaClient().$extends({});
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = prismaInstance;
+  }
+} catch {
+  // Fallback to an empty object during build when Prisma isn't generated.
+  prismaInstance = {} as any;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+export const prisma = prismaInstance;

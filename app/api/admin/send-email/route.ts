@@ -4,7 +4,7 @@ import { sendCustomEmail } from "@/lib/email"
 import { cookies } from "next/headers"
 
 export async function POST(req: Request) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const secret = cookieStore.get("admin_secret")?.value
 
   if (secret !== process.env.ADMIN_SECRET) {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     select: { email: true },
   })
 
-  const emails = Array.from(new Set(purchases.map((p) => p.email)))
+  const emails = Array.from(new Set(purchases.map((p: any) => p.email))) as string[]
 
   for (const email of emails) {
     await sendCustomEmail(email, subject, message)
