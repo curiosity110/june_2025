@@ -8,20 +8,46 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          version: 8
-      - uses: actions/setup-node@v4
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Enable Corepack (uses packageManager from package.json)
+        run: corepack enable
+
+      - name: Print versions
+        run: |
+          node -v
+          pnpm -v
+
+      - name: Cache Turbo
+        uses: actions/cache@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Generate Prisma Client
         run: pnpm db:generate
+
       - name: Lint, test, build
         run: pnpm turbo run lint test build --filter=!packages/ui --filter=!packages/server
+
+      # Start the app in the background for Lighthouse
+      - name: Start app
+        run: |
+          pnpm start & \
+          npx wait-on http://localhost:3000
+
       - name: Lighthouse budget check
         run: pnpm lighthouse-ci http://localhost:3000 --budget-path=.lighthousebudget.json
