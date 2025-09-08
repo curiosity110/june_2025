@@ -4,7 +4,7 @@ import { sendEmailByType } from "@/lib/email";
 import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const secret = cookieStore.get("admin_secret")?.value;
   if (secret !== process.env.ADMIN_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

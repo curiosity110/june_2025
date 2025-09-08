@@ -2,8 +2,9 @@
 import { products } from "@/lib/products"
 import { notFound } from "next/navigation"
 
-export default function ThankYouPage({ params }: { params: { slug: string } }) {
-  const product = products[params.slug]
+export default async function ThankYouPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const product = products[slug]
   if (!product) return notFound()
 
   return (

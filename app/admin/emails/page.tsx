@@ -15,7 +15,7 @@ interface SearchParams {
 
 export const dynamic = 'force-dynamic'
 
-export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
+export default async function EmailActivityPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const cookieStore = await cookies()
   const cookie = cookieStore.get('admin_secret')?.value
   if (cookie !== process.env.ADMIN_SECRET) {
@@ -40,7 +40,7 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
 
   const logCounts = await prisma.emailLog.findMany({
     where: {
-      OR: queue.map((q) => ({ email: q.email, template: q.template })),
+      OR: queue.map((q: any) => ({ email: q.email, template: q.template })),
     },
     select: { email: true, template: true, count: true },
   })
@@ -72,7 +72,7 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
               </tr>
             </thead>
             <tbody>
-              {logs.map((log) => (
+              {logs.map((log: any) => (
                 <tr key={log.id} className="border-t border-[#29293d]">
                   <td className="p-2">{log.email}</td>
                   <td className="p-2">{log.product}</td>
@@ -139,7 +139,7 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
               </tr>
             </thead>
             <tbody>
-              {queue.map((q) => (
+              {queue.map((q: any) => (
                 <tr key={q.id} className="border-t border-[#29293d]">
                   <td className="p-2">{q.email}</td>
                   <td className="p-2">{q.product}</td>

@@ -6,10 +6,10 @@ import { useTheme } from '@/components/context/theme-context'
 
 export default function BodyWrapper({
   children,
-  fonts,
+  fonts = "",
 }: {
   children: React.ReactNode
-  fonts: string
+  fonts?: string
 }) {
   const { theme, layout, animation } = useTheme()
 

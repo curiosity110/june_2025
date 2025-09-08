@@ -4,7 +4,7 @@ import { Resend } from "resend";
 import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const secret = cookieStore.get("admin_secret")?.value;
   if (secret !== process.env.ADMIN_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -39,7 +39,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No eligible recipients" }, { status: 400 });
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY || "");
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: "Email service not configured" }, { status: 500 });
+  }
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const from = process.env.EMAIL_FROM || "info@ubc-finance.com";
   if (mode === "bcc") {
     await resend.emails.send({ from, to: from, bcc: allowed, subject, html });
