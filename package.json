@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint",
     "move-to-packages": "ts-node scripts/move-to-packages.ts",
     "test": "playwright test",
@@ -20,7 +20,6 @@
     "lucide-react": "^0.515.0",
     "micro": "^10.0.1",
     "next": "15.3.3",
-    "ngrok": "^5.0.0-beta.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
@@ -29,6 +28,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.0",
     "@tailwindcss/postcss": "^4",
     "@types/micro": "^7.3.7",
     "@types/node": "^20",
@@ -39,8 +39,7 @@
     "prettier": "3.6.0",
     "prisma": "6.11.1",
     "tailwindcss": "^4.1.10",
-    "typescript": "^5",
-    "@playwright/test": "^1.44.0"
+    "typescript": "^5"
   },
   "packageManager": "pnpm@10.12.2"
 }

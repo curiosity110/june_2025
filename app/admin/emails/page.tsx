@@ -1,33 +1,39 @@
-import { prisma } from 'db/client'
-import { products } from '@/lib/products'
-import Link from 'next/link'
-import RetryButton from './RetryButton'
-import RetryAllButton from './RetryAllButton'
-import SendEmailPanel from './SendEmailPanel'
-import { cookies } from 'next/headers'
+import { prisma } from "db/client";
+import { products } from "@/lib/products";
+import Link from "next/link";
+import RetryButton from "./RetryButton";
+import RetryAllButton from "./RetryAllButton";
+import SendEmailPanel from "./SendEmailPanel";
+import { cookies } from "next/headers";
 
-interface SearchParams {
-  tab?: string
-  product?: string
-  status?: string
-  email?: string
-}
+type SP = Record<string, string | string[] | undefined>;
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
-export default async function EmailActivityPage({ searchParams }: { searchParams: SearchParams }) {
-  const cookieStore = await cookies()
-  const cookie = cookieStore.get('admin_secret')?.value
+const toStr = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v);
+
+export default async function EmailActivityPage({
+  searchParams,
+}: {
+  // ✅ Next 15: it's a Promise
+  searchParams: Promise<SP>;
+}) {
+  const sp = await searchParams;
+  const tab = toStr(sp.tab) ?? "sent";
+  const product = toStr(sp.product);
+  const status = toStr(sp.status);
+  const email = toStr(sp.email);
+
+  // ✅ cookies() is sync
+  const cookie = cookies().get("admin_secret")?.value;
   if (cookie !== process.env.ADMIN_SECRET) {
-    return <div className="p-6 text-white">Unauthorized</div>
+    return <div className="p-6 text-white">Unauthorized</div>;
   }
-
-  const { tab = 'sent', product, status, email } = await searchParams
 
   const logs = await prisma.emailLog.findMany({
     where: product ? { product } : undefined,
-    orderBy: { sentAt: 'desc' },
-  })
+    orderBy: { sentAt: "desc" },
+  });
 
   const queue = await prisma.emailQueue.findMany({
     where: {
@@ -35,32 +41,30 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
       ...(status ? { status } : {}),
       ...(email ? { email: { contains: email } } : {}),
     },
-    orderBy: { retryAt: 'desc' },
-  })
+    orderBy: { retryAt: "desc" },
+  });
 
   const logCounts = await prisma.emailLog.findMany({
-    where: {
-      OR: queue.map((q) => ({ email: q.email, template: q.template })),
-    },
+    where: { OR: queue.map((q) => ({ email: q.email, template: q.template })) },
     select: { email: true, template: true, count: true },
-  })
-  const countMap: Record<string, number> = {}
-  for (const l of logCounts) {
-    countMap[`${l.email}-${l.template}`] = l.count
-  }
+  });
+
+  const countMap: Record<string, number> = {};
+  for (const l of logCounts) countMap[`${l.email}-${l.template}`] = l.count;
 
   return (
     <div className="p-6 text-white">
       <h1 className="text-2xl font-bold mb-4">📧 Email Dashboard</h1>
+
       <div className="flex gap-6 mb-6">
-        <Link href="/admin/emails?tab=send" className={tab === 'send' ? 'text-yellow-400 font-bold' : ''}>Send</Link>
-        <Link href="/admin/emails?tab=sent" className={tab === 'sent' ? 'text-yellow-400 font-bold' : ''}>Sent</Link>
-        <Link href="/admin/emails?tab=queued" className={tab === 'queued' ? 'text-yellow-400 font-bold' : ''}>Queued</Link>
+        <Link href="/admin/emails?tab=send"   className={tab === "send" ? "text-yellow-400 font-bold" : ""}>Send</Link>
+        <Link href="/admin/emails?tab=sent"   className={tab === "sent" ? "text-yellow-400 font-bold" : ""}>Sent</Link>
+        <Link href="/admin/emails?tab=queued" className={tab === "queued" ? "text-yellow-400 font-bold" : ""}>Queued</Link>
       </div>
 
-      {tab === 'send' && <SendEmailPanel />}
+      {tab === "send" && <SendEmailPanel />}
 
-      {tab === 'sent' && (
+      {tab === "sent" && (
         <div className="overflow-x-auto">
           <h2 className="text-xl font-bold mb-2">Sent Emails</h2>
           <table className="min-w-full bg-[#1f1f2e] rounded-md">
@@ -84,27 +88,17 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
         </div>
       )}
 
-      {tab === 'queued' && (
+      {tab === "queued" && (
         <div className="overflow-x-auto">
           <form className="flex flex-wrap gap-2 mb-4">
             <input type="hidden" name="tab" value="queued" />
-            <select
-              name="product"
-              defaultValue={product || ''}
-              className="bg-black text-white border border-gray-500 rounded px-3 py-1"
-            >
+            <select name="product" defaultValue={product || ""} className="bg-black text-white border border-gray-500 rounded px-3 py-1">
               <option value="">All Products</option>
               {Object.values(products).map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.title}
-                </option>
+                <option key={p.slug} value={p.slug}>{p.title}</option>
               ))}
             </select>
-            <select
-              name="status"
-              defaultValue={status || ''}
-              className="bg-black text-white border border-gray-500 rounded px-3 py-1"
-            >
+            <select name="status" defaultValue={status || ""} className="bg-black text-white border border-gray-500 rounded px-3 py-1">
               <option value="">All Statuses</option>
               <option value="queued">Queued</option>
               <option value="failed">Failed</option>
@@ -113,20 +107,17 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
             <input
               type="text"
               name="email"
-              defaultValue={email || ''}
+              defaultValue={email || ""}
               placeholder="Filter email"
               className="bg-black text-white border border-gray-500 rounded px-3 py-1"
             />
-            <button
-              type="submit"
-              className="bg-yellow-500 text-black font-semibold px-4 py-1 rounded"
-            >
-              Apply
-            </button>
+            <button type="submit" className="bg-yellow-500 text-black font-semibold px-4 py-1 rounded">Apply</button>
           </form>
+
           <div className="mb-2">
             <RetryAllButton product={product} status={status} email={email} />
           </div>
+
           <table className="min-w-full bg-[#1f1f2e] rounded-md">
             <thead>
               <tr className="text-left bg-[#29293d]">
@@ -146,9 +137,7 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
                   <td className="p-2">{q.retryAt.toLocaleString()}</td>
                   <td className="p-2 capitalize">{q.status}</td>
                   <td className="p-2">{countMap[`${q.email}-${q.template}`] ?? 0}</td>
-                  <td className="p-2">
-                    <RetryButton id={q.id} />
-                  </td>
+                  <td className="p-2"><RetryButton id={q.id} /></td>
                 </tr>
               ))}
             </tbody>
@@ -156,5 +145,5 @@ export default async function EmailActivityPage({ searchParams }: { searchParams
         </div>
       )}
     </div>
-  )
+  );
 }
