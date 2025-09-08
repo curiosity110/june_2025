@@ -1,2 +1,76 @@
 https://stackblitz.com/storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCR1VKNEFFPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--7ce261c7521960a7d85fb5f59bcc1e1eb89f2ecb//.gitignore
 .env
+
+# -------------------------
+# Node / pnpm
+# -------------------------
+node_modules
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# pnpm store (if local)
+.pnpm-store/
+
+# -------------------------
+# Build / Output
+# -------------------------
+dist
+build
+.next
+out
+.vercel
+.cache
+.turbo
+coverage
+
+# -------------------------
+# Env & Secrets
+# -------------------------
+.env
+.env.*
+!.env.example
+
+# -------------------------
+# Logs
+# -------------------------
+logs
+*.log
+*.csv
+*.dat
+*.pid
+*.seed
+*.pid.lock
+
+# -------------------------
+# OS files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# Prisma
+# -------------------------
+prisma/generated/
+prisma/migrations/*.tmp
+*.db-journal
+
+# -------------------------
+# Playwright
+# -------------------------
+/playwright-report
+/test-results
+/.playwright-cache
+/.vscode/testlogs
+
+# -------------------------
+# Misc
+# -------------------------
+*.swp
+*.swo
+*.bak
+.idea
+.vscode/*
+!.vscode/settings.json
