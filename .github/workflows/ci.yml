@@ -9,57 +9,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      # === required secrets (set in GitHub → Settings → Secrets and variables → Actions) ===
       ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+      # Optional (set only if you use them)
+      NEXT_PUBLIC_TEST_EMAIL: ${{ secrets.NEXT_PUBLIC_TEST_EMAIL }}
+      TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+      DUMMY_PAYMENT_MODE: ${{ secrets.DUMMY_PAYMENT_MODE }}
 
     steps:
       - uses: actions/checkout@v4
 
+      # Make pnpm available first so setup-node can cache it
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.2
+          run_install: false
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-      - name: Enable & prepare pnpm from packageManager
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.12.2 --activate
-          pnpm -v
-
-      # Cache pnpm store manually
-      - name: Get pnpm store path
-        id: pnpm-cache
-        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Cache Turbo
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
-      - name: Install dependencies (frozen)
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma Client
-        run: pnpm db:generate
-
-      - name: Lint, test, build
-        run: pnpm turbo run lint test build --filter=!packages/ui --filter=!packages/server
-
-      - name: Start app
-        run: |
-          pnpm start & \
-          npx wait-on http://localhost:3000
-
-      - name: Lighthouse budget check
-        run: pnpm lighthouse-ci http://localhost:3000 --budget-path=.lighthousebudget.json
+          node-version: '20'
+          cach
