@@ -26,6 +26,7 @@ jobs:
           node -v
           pnpm -v
 
+      # Cache Turbo incremental state
       - name: Cache Turbo
         uses: actions/cache@v4
         with:
@@ -43,7 +44,7 @@ jobs:
       - name: Lint, test, build
         run: pnpm turbo run lint test build --filter=!packages/ui --filter=!packages/server
 
-      # Start the app in the background for Lighthouse
+      # ---- Lighthouse (needs a running server) ----
       - name: Start app
         run: |
           pnpm start & \
