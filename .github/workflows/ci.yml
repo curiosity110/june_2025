@@ -9,13 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # === required secrets (set in GitHub → Settings → Secrets and variables → Actions) ===
       ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
-      # Optional (set only if you use them)
       NEXT_PUBLIC_TEST_EMAIL: ${{ secrets.NEXT_PUBLIC_TEST_EMAIL }}
       TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
       DUMMY_PAYMENT_MODE: ${{ secrets.DUMMY_PAYMENT_MODE }}
@@ -23,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Make pnpm available first so setup-node can cache it
+      # Install pnpm first so setup-node can use pnpm caching
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -34,4 +32,36 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cach
+          cache: 'pnpm'
+
+      - name: Show versions
+        run: |
+          node -v
+          pnpm -v
+
+      - name: Install deps (frozen)
+        run: pnpm install --frozen-lockfile
+
+      # If you see engine download flakiness in CI, swap the two steps below:
+      - name: Generate Prisma Client
+        run: pnpm prisma generate --schema packages/db/prisma/schema.prisma
+
+      - name: Build
+        run: pnpm run build
+
+      # quick smoke boot to ensure server starts
+      - name: Start app
+        run: |
+          pnpm start & \
+          npx wait-on http://localhost:3000
+
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          echo "::group::env"
+          env | sort
+          echo "::endgroup::"
+          echo "::group::pnpm"
+          pnpm config list || true
+          pnpm store path || true
+          echo "::endgroup::"

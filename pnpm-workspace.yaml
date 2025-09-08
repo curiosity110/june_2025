@@ -1,6 +1,6 @@
 packages:
-  - '.'
-  - 'packages/*'
+  - .
+  - packages/*
 
 ignoredBuiltDependencies:
   - '@prisma/engines'
@@ -8,6 +8,7 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - '@prisma/client'
+  - '@prisma/engines'
   - '@tailwindcss/oxide'
   - prisma
   - sharp
