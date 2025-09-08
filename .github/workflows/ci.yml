@@ -9,25 +9,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Provide envs via repository Secrets (Settings → Secrets → Actions)
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
-      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-      STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
-      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      # add other secrets here if needed
 
     steps:
       - uses: actions/checkout@v4
 
+      # 1) Install pnpm BEFORE setup-node’s cache step
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.2
+          run_install: false
+
+      # 2) Now setup-node can safely use cache: 'pnpm'
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "pnpm"
-
-      - name: Enable Corepack (uses packageManager from package.json)
-        run: corepack enable
 
       - name: Show versions
         run: |
@@ -51,7 +52,6 @@ jobs:
       - name: Lint, test, build
         run: pnpm turbo run lint test build --filter=!packages/ui --filter=!packages/server
 
-      # Start the app before Lighthouse (adjust start script if needed)
       - name: Start app
         run: |
           pnpm start & \
@@ -59,16 +59,3 @@ jobs:
 
       - name: Lighthouse budget check
         run: pnpm lighthouse-ci http://localhost:3000 --budget-path=.lighthousebudget.json
-
-      # Helpful debug if something fails
-      - name: Diagnostics on failure
-        if: failure()
-        run: |
-          echo "::group::pnpm"
-          pnpm config list || true
-          pnpm store path || true
-          echo "::endgroup::"
-          echo "::group::env"
-          node -p "process.versions" || true
-          env | sort
-          echo "::endgroup::"
