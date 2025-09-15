@@ -24,8 +24,9 @@ export default async function EmailActivityPage({
   const status = toStr(sp.status);
   const email = toStr(sp.email);
 
-  // ✅ cookies() is sync
-  const cookie = cookies().get("admin_secret")?.value;
+  // ✅ cookies() is async in Next.js 15
+  const cookieStore = await cookies()
+  const cookie = cookieStore.get("admin_secret")?.value;
   if (cookie !== process.env.ADMIN_SECRET) {
     return <div className="p-6 text-white">Unauthorized</div>;
   }

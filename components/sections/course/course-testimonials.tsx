@@ -18,13 +18,15 @@ const testimonials = [
 
 export default function CourseTestimonials() {
   return (
-    <section className="bg-section px-6 py-20 text-center text-white">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <h2 className="text-2xl sm:text-3xl font-heading font-bold text-accent">Student Success Stories</h2>
-        <div className="grid gap-6 sm:grid-cols-3">
+    <section className="container mx-auto px-6 py-16">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl font-heading font-black text-white mb-8">
+          Student Success Stories
+        </h2>
+        <div className="grid gap-6 md:grid-cols-3">
           {testimonials.map((t, i) => (
-            <div key={i} className="bg-card border border-border p-6 rounded-xl shadow-md h-full flex flex-col justify-between">
-              <p className="text-purple-200 text-sm mb-4 flex-1">"{t.quote}"</p>
+            <div key={i} className="glass-card border border-accent/30 p-5 rounded-xl shadow-md h-full flex flex-col justify-between hover:border-accent/50 transition-all duration-300">
+              <p className="text-white/90 text-sm mb-4 flex-1 leading-relaxed">"{t.quote}"</p>
               <div className="flex items-center justify-center gap-2 text-accent text-sm font-medium">
                 <Quote className="w-4 h-4" />
                 <span>{t.name}</span>

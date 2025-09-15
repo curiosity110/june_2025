@@ -1,8 +1,8 @@
 'use client'
 
 import Header from '@/components/layout/header'
+import Footer from '@/components/layout/footer'
 import { Toaster } from 'react-hot-toast'
-import { useTheme } from '@/components/context/theme-context'
 
 export default function BodyWrapper({
   children,
@@ -11,11 +11,12 @@ export default function BodyWrapper({
   children: React.ReactNode
   fonts: string
 }) {
-  const { theme, layout, animation } = useTheme()
-
   return (
-    <body className={`${fonts} font-sans text-white theme-${theme} layout-${layout}`}>
-      <div className={`relative group ${layout === 'wide' ? '' : 'max-w-6xl mx-auto'}`}>
+    <body className={`${fonts} font-sans text-white bg-section`}>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <div className="relative min-h-screen flex flex-col">
         <Header />
         <Toaster position="top-center" />
         {process.env.DUMMY_PAYMENT_MODE === 'true' && (
@@ -23,9 +24,10 @@ export default function BodyWrapper({
             Payments are simulated for testing. No real transaction is made.
           </div>
         )}
-        <main className={animation === 'fade' ? 'animate-fade' : 'animate-slide'}>
+        <main id="main-content" className="flex-1">
           {children}
         </main>
+        <Footer />
       </div>
     </body>
   )

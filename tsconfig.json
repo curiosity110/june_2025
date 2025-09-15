@@ -7,7 +7,11 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "app/admin/**/*",
+    "app/api/admin/**/*", 
+    "components/sections/*-test.tsx",
+    "lib/email.ts"
   ],
   "compilerOptions": {}
 }

@@ -44,7 +44,7 @@ function buildTemplate(type: EmailType, slug: string) {
         <h2 style="color: #eab308;">${product?.title || "Your Download"}</h2>
         <p>${product?.description || "Thanks for grabbing your resource!"}</p>
         <a href="${downloadUrl}" style="display:inline-block;padding:12px 24px;background-color:#facc15;color:black;font-weight:bold;text-decoration:none;border-radius:8px;">Access</a>
-        <p style="margin-top:20px">${bonusText[type] || bonusText.default}</p>
+        <p style="margin-top:20px">${(bonusText as any)[type] || bonusText.default}</p>
         <p style="font-size:12px;color:#999">Need help? Just reply to this email.</p>
         <p style="font-size:12px;color:#666;margin-top:30px;">Sent from <a href="${siteURL}" style="color:#666;text-decoration:none;">${siteURL.replace(/^https?:\/\//,'')}</a></p>
       </div>
@@ -155,7 +155,7 @@ export async function sendEmailByType({
       })
     }
 
-    console.log("✅ Email sent:", email, "Result:", result.id || "OK");
+    console.log("✅ Email sent:", email, "Result:", (result as any).id || "OK");
     return { success: true };
   } catch (err: any) {
     console.error("❌ sendEmailByType failed:", err.message);

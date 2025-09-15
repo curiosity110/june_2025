@@ -13,7 +13,7 @@ export default function CourseFooterCTA() {
           You can keep figuring this out alone. Or plug into a proven system and start earning today.
         </p>
 
-        <Button className="bg-highlight text-black font-bold px-8 py-4 hover:scale-105 transition">
+        <Button className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 text-black font-bold px-8 py-4 hover:scale-105 transition shadow-md">
           Join Now & Start Earning Tonight
         </Button>
 
