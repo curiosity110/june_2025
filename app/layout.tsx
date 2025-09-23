@@ -4,6 +4,7 @@ import { Inter, Space_Grotesk } from "next/font/google"
 import type { Metadata } from "next"
 import Providers from "@/components/layout/providers"
 import BodyWrapper from "@/components/layout/body-wrapper"
+import { AppRouter } from "@/routes/AppRouter"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -151,7 +152,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//analytics.google.com" />
       </head>
       <Providers>
-        <BodyWrapper fonts={fonts}>{children}</BodyWrapper>
+        <BodyWrapper fonts={fonts}>
+          <AppRouter>{children}</AppRouter>
+        </BodyWrapper>
       </Providers>
     </html>
   )

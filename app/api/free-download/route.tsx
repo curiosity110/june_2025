@@ -2,6 +2,9 @@
 import { NextResponse } from "next/server"
 import { sendEmailByType } from "@/lib/email"
 import { products } from "@/lib/products"
+import { createScopedLogger } from "@/utils/logger"
+
+const log = createScopedLogger("api:free-download")
 
 export async function POST(req: Request) {
   try {
@@ -22,7 +25,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, downloadUrl })
   } catch (err) {
-    console.error("🔥 API /free-download error:", err)
+    log.error("🔥 API /free-download error:", err)
     return NextResponse.json({ success: false, error: "Server error" }, { status: 500 })
   }
 }

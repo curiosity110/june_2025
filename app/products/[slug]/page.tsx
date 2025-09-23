@@ -9,6 +9,9 @@ import { products } from "@/lib/products"
 import Image from "next/image"
 import toast from "react-hot-toast"
 import { useEffect } from "react"
+import { createScopedLogger } from "@/utils/logger"
+
+const log = createScopedLogger("products:detail")
 
 
 export default function ProductPage() {
@@ -57,7 +60,7 @@ export default function ProductPage() {
       }
     } catch (err) {
       toast.error("Could not send email.")
-      console.error("Free download error:", err)
+      log.error("Free download error:", err)
     }
 
     setLoading(false)
@@ -87,7 +90,7 @@ export default function ProductPage() {
         toast.error("\u26a0\ufe0f Email failed to send")
       }
     } catch (err) {
-      console.error("Checkout error:", err)
+      log.error("Checkout error:", err)
       toast.error("\u26a0\ufe0f Email failed to send")
     }
 

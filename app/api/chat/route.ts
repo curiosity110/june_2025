@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server"
+import { createScopedLogger } from "@/utils/logger"
+
+const log = createScopedLogger("api:chat")
 
 export async function POST(req: Request) {
   const { messages } = await req.json()
@@ -24,7 +27,7 @@ export async function POST(req: Request) {
   })
 
   if (!res.ok) {
-    console.error("OpenAI API error", await res.text())
+    log.error("OpenAI API error", await res.text())
     return NextResponse.json({ error: "AI request failed" }, { status: 500 })
   }
 

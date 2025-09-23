@@ -5,10 +5,13 @@
  */
 import { execSync } from 'child_process';
 import path from 'path';
+import { createScopedLogger } from '../src/utils/logger';
+
+const log = createScopedLogger('scripts:move-to-packages');
 
 const [, , src, pkg] = process.argv;
 if (!src || !pkg) {
-  console.error('Usage: pnpm move-to-packages <src> <package>');
+  log.error('Usage: pnpm move-to-packages <src> <package>');
   process.exit(1);
 }
 
@@ -25,7 +28,7 @@ try {
     shell: '/bin/bash',
   });
 } catch (err) {
-  console.error('Codemod failed', err);
+  log.error('Codemod failed', err);
 }
 
 // Update Storybook stories referencing the old path
@@ -38,4 +41,4 @@ try {
   // ignore when no stories are found
 }
 
-console.log(`Moved ${src} -> ${dest}`);
+log.info(`Moved ${src} -> ${dest}`);
