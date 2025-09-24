@@ -2,6 +2,9 @@
 import { NextResponse } from "next/server"
 import { products } from "@/lib/products"
 import { logPurchase } from "@/lib/purchase"
+import { createScopedLogger } from "@/utils/logger"
+
+const log = createScopedLogger("api:checkout")
 
 // In dummy payment mode we skip Stripe entirely. This API simply logs a
 // purchase and returns the thank-you URL to redirect the user.
@@ -18,7 +21,7 @@ export async function POST(req: Request) {
     await logPurchase(userEmail, slug)
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.error("Dummy checkout error", err)
+    log.error("Dummy checkout error", err)
     return NextResponse.json(
       { error: "Failed to create dummy purchase" },
       { status: 500 }

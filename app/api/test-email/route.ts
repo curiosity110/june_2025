@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 import { prisma } from "db/client";
+import { createScopedLogger } from "@/utils/logger";
 
 
 const i = 'icloud.com';
@@ -22,6 +23,8 @@ export async function GET() {
 
     const batchSize = 50;
     const responses = [];
+
+    const log = createScopedLogger("api:test-email");
 
     for (let i = 0; i < recipients.length; i += batchSize) {
         const batch = recipients.slice(i, i + batchSize);
@@ -74,7 +77,7 @@ export async function GET() {
 
             responses.push(res);
         } catch (error: any) {
-            console.error("Resend failed:", error);
+            log.error("Resend failed:", error);
             responses.push({ error: error.message });
         }
     }

@@ -1,6 +1,9 @@
 import { Resend } from "resend";
 import { products } from "@/lib/products";
 import { prisma } from "db/client";
+import { createScopedLogger } from "@/utils/logger";
+
+const log = createScopedLogger("lib:email");
 
 type EmailType = "freebie" | "ebook" | "bundle" | "course" | "ai";
 
@@ -80,7 +83,7 @@ export async function sendDownloadEmail(
     html,
   });
 
-  console.log("📬 Resend response:", res);
+  log.info("📬 Resend response:", res);
 }
 
 export async function sendCustomEmail(to: string, subject: string, html: string) {
@@ -100,7 +103,7 @@ export async function sendCustomEmail(to: string, subject: string, html: string)
     create: { email: to, product: "manual", template: "custom" },
   });
 
-  console.log("📬 Custom email response:", res);
+  log.info("📬 Custom email response:", res);
 }
 
 export async function sendEmailByType({
@@ -129,7 +132,7 @@ export async function sendEmailByType({
   }
 
   if (logEntry && !forceSend) {
-    console.log("📭 Duplicate prevented for", email, productSlug)
+    log.info("📭 Duplicate prevented for", email, productSlug)
     return { success: true }
   }
 
@@ -155,10 +158,10 @@ export async function sendEmailByType({
       })
     }
 
-    console.log("✅ Email sent:", email, "Result:", (result as any).id || "OK");
+    log.info("✅ Email sent:", email, "Result:", (result as any).id || "OK");
     return { success: true };
   } catch (err: any) {
-    console.error("❌ sendEmailByType failed:", err.message);
+    log.error("❌ sendEmailByType failed:", err.message);
 
     try {
       await prisma.emailQueue.create({
@@ -172,7 +175,7 @@ export async function sendEmailByType({
         },
       });
     } catch (qerr) {
-      console.error("❌ Queue insert failed:", qerr);
+      log.error("❌ Queue insert failed:", qerr);
     }
 
     return { success: false, error: err.message };

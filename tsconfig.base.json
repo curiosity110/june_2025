@@ -29,6 +29,24 @@
       "@/lib/*": [
         "lib/*"
       ],
+      "@/api/*": [
+        "src/api/*"
+      ],
+      "@/hooks/*": [
+        "src/hooks/*"
+      ],
+      "@/routes/*": [
+        "src/routes/*"
+      ],
+      "@/utils/*": [
+        "src/utils/*"
+      ],
+      "@/types/*": [
+        "src/types/*"
+      ],
+      "@/src/*": [
+        "src/*"
+      ],
       "ui/*": [
         "packages/ui/src/*"
       ],
